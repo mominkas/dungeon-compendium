@@ -1,23 +1,35 @@
-const express = require('express');
+import express from 'express';
+import cors from 'cors';
+import { getPool, terminateSession } from './db.js'; 
+import router from './routes/index.js'; 
+
 const app = express();
-const cors = require('cors');
-const pool = require('./db')
 
 app.use(cors());
 app.use(express.json());
+app.use('/', router);
 
-// TEST ROUTE REMOVE LATER
-app.post("/test", async(req, res) => {
+const initServer = async () => {
     try {
-        const { name } = req.body;
-        const addTest = await pool.query("INSERT INTO test (name) VALUES($1)", [name]);
-
-        res.json(addTest)
+        await getPool();
+        console.log('successfully connected to database :)')
+        app.listen(5001, () => console.log("listening on port 5001"));
     } catch (error) {
-        console.log(error)
+        console.log('Error connecting to db ' + error);
     }
-})
+}
 
-app.listen(5001, () => {
-    console.log("server on port 5001");
-});
+initServer();
+
+const terminateDbConnection = async () => {
+    try {
+        await terminateSession();
+    } catch (error) {
+        console.log('error disconnecting from the db ' + error);
+    } finally {
+        process.exit(0)
+    }
+}
+
+process.on('SIGINT', await terminateDbConnection);
+process.on('SIGTERM', await terminateDbConnection);
