@@ -6,5 +6,5 @@
 
 ## Scripts
 
-- To create tables for the db, run the createTables script using the follwing command in the temrinal: psql -U (you username) -d (db name) -f (path to createTables.sql in the sql-scripts folder)
+- To create tables for the db, run the createTables script using the follwing command in the temrinal: psql -U (your username) -d (db name) -f (path to createTables.sql in the sql-scripts folder)
 - To run the insertData script, follow the above.
