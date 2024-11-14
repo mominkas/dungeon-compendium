@@ -1,23 +1,11 @@
-DROP TABLE IF EXISTS Class_Description CASCADE;
-DROP TABLE IF EXISTS Class_Level_Features CASCADE;
-DROP TABLE IF EXISTS Class CASCADE;
-DROP TABLE IF EXISTS Species CASCADE;
-DROP TABLE IF EXISTS Feat CASCADE;
-DROP TABLE IF EXISTS Participant CASCADE;
-DROP TABLE IF EXISTS Character CASCADE;
-DROP TABLE IF EXISTS Has_Feat CASCADE;
-DROP TABLE IF EXISTS Ability_Score CASCADE;
-DROP TABLE IF EXISTS Game_Player CASCADE;
-DROP TABLE IF EXISTS Game_Master CASCADE;
-DROP TABLE IF EXISTS Campaign CASCADE;
-DROP TABLE IF EXISTS Enrol CASCADE;
-DROP TABLE IF EXISTS Event CASCADE;
-DROP TABLE IF EXISTS Combat_Encounter CASCADE;
-DROP TABLE IF EXISTS Social_Encounter CASCADE;
-DROP TABLE IF EXISTS Skill CASCADE;
-DROP TABLE IF EXISTS Social_Check CASCADE;
-DROP TABLE IF EXISTS Turn CASCADE;
-DROP TABLE IF EXISTS Combat_Check CASCADE;
+DO $$
+    DECLARE
+        r RECORD;
+    BEGIN
+        FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = 'public') LOOP
+                EXECUTE 'DROP TABLE IF EXISTS ' || quote_ident(r.tablename) || ' CASCADE';
+        END LOOP;
+END $$;
 
 CREATE TABLE Class_Description (
     name VARCHAR(100) PRIMARY KEY,
@@ -78,8 +66,8 @@ CREATE TABLE Character (
     class_name VARCHAR(100) NOT NULL,
     species_name VARCHAR(100) NOT NULL,
     participant_id INTEGER NOT NULL,
-    FOREIGN KEY (class_name, level) REFERENCES Class(name, level), -- removed no action as it is the default behavior
-    FOREIGN KEY (species_name) REFERENCES Species(name),
+    FOREIGN KEY (class_name, level) REFERENCES Class(name, level) ON DELETE CASCADE,
+    FOREIGN KEY (species_name) REFERENCES Species(name) ON DELETE CASCADE,
     FOREIGN KEY (participant_id) REFERENCES Participant(participant_id) ON DELETE CASCADE
 );
 
@@ -124,7 +112,7 @@ CREATE TABLE Campaign (
     FOREIGN KEY (game_master_id) REFERENCES Game_Master(game_master_id)
 );
 
-CREATE TABLE Enrol (
+CREATE TABLE Enroll (
     game_player_id INTEGER,
     campaign_id INTEGER,
     date_joined DATE NOT NULL,
@@ -173,6 +161,7 @@ CREATE TABLE Social_Check (
     threshold INTEGER NULL,
     dice VARCHAR(100) NULL,
     success_state BOOLEAN NULL,
+    FOREIGN KEY (skill_name) REFERENCES Skill(name) ON DELETE CASCADE,
     FOREIGN KEY (character_id, ability_score_name) REFERENCES Ability_Score(character_id, name) ON DELETE CASCADE
 );
 

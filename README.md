@@ -1,10 +1,21 @@
 ## Backend
 
-- setup your env file with credentails and details for connecting to your db on the postgres server
-- no need to create a db manually, running the backend does it for you to streamline the process
-- use 'nodemon server' to startup the backend and connect to the db
+- Set up your .env file with credentials and details (see below) for connecting to your db on the postgres server
+- No need to create a db manually, running the backend does it for you to streamline the process
+- Use `nodemon server` to start up the backend and connect to the db
+- Example .env file:\
+  USER_NAME=postgres\
+  PASSWORD=postgres\
+  HOST=localhost\
+  PORT=5432\
+  DATABASE=dnd
 
 ## Scripts
 
-- To create tables for the db, run the createTables script using the follwing command in the temrinal: psql -U (your username) -d (db name) -f (path to createTables.sql in the sql-scripts folder)
-- To run the insertData script, follow the above.
+- To create tables for the db, run the createTables.sql script using the following command in the terminal: `psql -U [your username] -d [db name] -f [path to createTables.sql in the sql-scripts folder]`
+- To insert data into the tables, run insertData.sql
+- updateClassDescription.sql, updateClassLevelFeatures.sql and updateSpecies.sql all create a function used update any number of non-PK attributes in their respective tables.
+
+## Frontend
+
+- Use `npm run dev` to start up frontend
