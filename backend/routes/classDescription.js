@@ -27,9 +27,9 @@ router.post('/', async (req, res) => {
                 saving_throw_proficiency
             ]);
 
-        res.json(insertClassDescription.rows[0]);
+        res.status(200).json(insertClassDescription.rows[0]);
     } catch (err) {
-        console.error(err.message);
+        res.status(400).json(err.message);
     }
 });
 
@@ -51,9 +51,9 @@ router.put('/:name', async (req, res) => {
             saving_throw_proficiency
         ]);
 
-        res.json(updateDesc.rows[0].update_class_description);
+        res.status(200).json(updateDesc.rows[0].update_class_description);
     } catch (err) {
-        console.error(err.message);
+       res.status(400).json(err.message);
     }
 });
 
@@ -65,9 +65,9 @@ router.delete('/:name', async (req, res) => {
 
         const deleteClassDesc = await pool.query("DELETE FROM class_description WHERE name = $1 RETURNING *", [name]);
 
-        res.json(deleteClassDesc.rows[0]);
+        res.status(200).json(deleteClassDesc.rows[0]);
     } catch (err) {
-        console.error(err.message);
+        res.status(400).json(err.message);
     }
 });
 

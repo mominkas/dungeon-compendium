@@ -19,9 +19,9 @@ router.post('/', async (req, res) => {
             level,
         ]);
 
-        res.json(insertClass.rows[0]);
+        res.status(200).json(insertClass.rows[0]);
     } catch (err) {
-        console.error(err.message);
+        res.status(400).json(err.message);
     }
 });
 
@@ -33,9 +33,9 @@ router.delete('/:name/:level', async (req, res) => {
 
         const deleteClass = await pool.query("DELETE FROM class WHERE name = $1 AND level = $2 RETURNING *", [name, level]);
 
-        res.json(deleteClass.rows[0]);
+        res.status(200).json(deleteClass.rows[0]);
     } catch (err) {
-        console.error(err.message);
+        res.status(400).json(err.message);
     }
 });
 

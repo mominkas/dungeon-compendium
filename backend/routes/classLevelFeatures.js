@@ -18,9 +18,9 @@ router.post('/', async (req, res) => {
             "INSERT INTO class_level_features (level, num_hit_die, advantage_effect, modifier_effect)" +
             "VALUES ($1, $2, $3, $4) RETURNING *", [level, num_hit_die, advantage_effect, modifier_effect]);
 
-        res.json(insertClassLevelFeatures.rows[0]);
+        res.status(200).json(insertClassLevelFeatures.rows[0]);
     } catch (err) {
-        console.error(err.message);
+        res.status(400).json(err.message);
     }
 });
 
@@ -34,7 +34,7 @@ router.put('/:level', async (req, res) => {
         const updateFeatures = await pool.query(
             "SELECT update_class_level_features($1, $2, $3, $4)", [level, num_hit_die, advantage_effect, modifier_effect]);
 
-        res.json(updateFeatures.rows[0].update_class_level_features);
+        res.status(200).json(updateFeatures.rows[0].update_class_level_features);
     } catch (err) {
         console.error(err.message);
     }
@@ -48,7 +48,7 @@ router.delete('/:level', async (req, res) => {
 
         const deleteClassLevelFeatures = await pool.query("DELETE FROM class_level_features WHERE level = $1 RETURNING *", [level]);
 
-        res.json(deleteClassLevelFeatures.rows[0]);
+        res.status(200).json(deleteClassLevelFeatures.rows[0]);
     } catch (err) {
         console.error(err.message);
     }

@@ -14,7 +14,7 @@
 
 - To create tables for the db, run the createTables.sql script using the following command in the terminal: `psql -U [your username] -d [db name] -f [path to createTables.sql in the sql-scripts folder]`
 - To insert data into the tables, run insertData.sql
-- updateClassDescription.sql, updateClassLevelFeatures.sql and updateSpecies.sql all create a function used update any number of non-PK attributes in their respective tables.
+- updateClassDescription.sql, updateClassLevelFeatures.sql and updateSpecies.sql all create functions used to update any number of non-PK attributes in their respective tables
 
 ## Frontend
 

@@ -29,9 +29,9 @@ async function selectAll(req, res, tableName) {
         const pool = await getPool();
         const query = `SELECT * FROM ${tableName}`;
         const result = await pool.query(query);
-        res.json(result.rows);
+        res.status(200).json(result.rows);
     } catch (err) {
-        console.error(err.message);
+        res.status(400).json(err.message);
     }
 }
 
