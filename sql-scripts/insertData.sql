@@ -40,58 +40,58 @@ INSERT INTO Feat (name, target_skill, description, modifier, requirement) VALUES
 ('War Caster', 'INT', 'You have advantage on saving throws to maintain concentration on a spell.', 1, 'Ability to cast at least one spell');
 
 -- Participant related inserts
-INSERT INTO Participant (participant_id, location, name, experience_level) VALUES
-(1001, 'Waterdeep', 'Momin Kashif', 5),
-(1002, 'Neverwinter', 'Julia Sangster', 6),
-(1003, 'Baldurs Gate', 'Annie Chung', 7),
-(1004, 'Feywild', 'Rachel Pottinger', 4),
-(1005, 'Icewind Dale', 'Jane Doe', 2);
+INSERT INTO Participant (location, name, password, experience_level) VALUES
+('Waterdeep', 'Momin Kashif', '1234', 5),
+('Neverwinter', 'Julia Sangster', '1234', 6),
+('Baldurs Gate', 'Annie Chung', '1234', 7),
+('Feywild', 'Rachel Pottinger', '1234', 4),
+('Icewind Dale', 'Jane Doe', '1234', 2);
 
 INSERT INTO Game_Player (game_player_id) VALUES
-(1001),
-(1002),
-(1003),
-(1004);
+(1),
+(2),
+(3),
+(4);
 
 INSERT INTO Game_Master (game_master_id) VALUES
-(1005);
+(5);
 
 -- Character and related inserts
-INSERT INTO Character (character_id, name, hair_color, eye_color, level, position, hp, class_name, species_name, participant_id) VALUES
-(1, 'Loathsome Dung Eater', 'Black', 'Brown', 2, 'Sallys Tavern', 18, 'Paladin', 'Dwarf', 1001),
-(2, 'Margit the Fell', NULL, 'Blue', 1, 'Top of Mount Doom', 12, 'Fighter', 'Human', 1002),
-(3, 'General Radhan', 'Silver', 'Green', 5, 'Baldurs Gate Potion Shop', 22, 'Wizard', 'Elf', 1003),
-(4, 'Zarak Shadowsong', 'Brown', 'Hazel', 3, 'Ravenloft Salon', 16, 'Rogue', 'Halfling', 1004),
-(5, 'Tarnished', NULL, NULL, 1, 'Avernus Concert Hall', 12, 'Fighter', 'Dragonborn', 1005);
+INSERT INTO Character (name, hair_color, eye_color, level, position, hp, class_name, species_name, participant_id) VALUES
+('Loathsome Dung Eater', 'Black', 'Brown', 2, 'Sallys Tavern', 18, 'Paladin', 'Dwarf', 1),
+('Margit the Fell', NULL, 'Blue', 1, 'Top of Mount Doom', 12, 'Fighter', 'Human', 2),
+('General Radhan', 'Silver', 'Green', 5, 'Baldurs Gate Potion Shop', 22, 'Wizard', 'Elf', 3),
+('Zarak Shadowsong', 'Brown', 'Hazel', 3, 'Ravenloft Salon', 16, 'Rogue', 'Halfling', 4),
+('Tarnished', NULL, NULL, 1, 'Avernus Concert Hall', 12, 'Fighter', 'Dragonborn', 5);
 
 -- Campaign related inserts
-INSERT INTO Campaign (campaign_id, campaign_name, meeting_location, meeting_time, setting, difficulty_level, max_num_players, current_num_players, description, date_created, game_master_id) VALUES
-(1, 'The Lost Mines of Phandelver', 'CS Building UBC', '18:00:00', 'Sword Coast', 'Easy', 5, 2, 'A classic adventure for new players.', '2024-01-15', 1005),
-(2, 'Curse of Strahd', NULL, '19:30:00', 'Ravenloft', 'Hard', 6, 2, NULL, '2024-02-20', 1005),
-(3, 'Storm Kings Thunder', 'AMS Nest', NULL, 'Sword Coast', 'Medium', 7, 5, 'A quest to unite the realms against a giant threat.', '2024-03-01', 1005),
-(4, 'Tales from the Yawning Portal', 'Stanley Park', '20:00:00', NULL, 'Medium', 5, 5, 'A collection of classic D&D adventures.', '2024-04-10', 1005),
-(5, 'Descent into Avernus', 'Dundas Square', '16:00:00', 'Avernus', NULL, 6, 2, NULL, '2024-05-15', 1005);
+INSERT INTO Campaign (campaign_name, meeting_location, meeting_time, setting, difficulty_level, max_num_players, current_num_players, description, date_created, game_master_id) VALUES
+('The Lost Mines of Phandelver', 'CS Building UBC', '18:00:00', 'Sword Coast', 'Easy', 5, 2, 'A classic adventure for new players.', '2024-01-15', 5),
+('Curse of Strahd', NULL, '19:30:00', 'Ravenloft', 'Hard', 6, 2, NULL, '2024-02-20', 5),
+('Storm Kings Thunder', 'AMS Nest', NULL, 'Sword Coast', 'Medium', 7, 5, 'A quest to unite the realms against a giant threat.', '2024-03-01', 5),
+('Tales from the Yawning Portal', 'Stanley Park', '20:00:00', NULL, 'Medium', 5, 5, 'A collection of classic D&D adventures.', '2024-04-10', 5),
+('Descent into Avernus', 'Dundas Square', '16:00:00', 'Avernus', NULL, 6, 2, NULL, '2024-05-15', 5);
 
-INSERT INTO Event (event_id, location, start_time, completion_status, campaign_id) VALUES 
-(1, 'Castle of Shadows', '18:00:00', 'Completed', 1),
-(2, 'Forest of Whispers', '14:30:00', 'In Progress', 1),
-(3, 'Mountain Fortress', '20:00:00', 'Pending', 2),
-(4, 'City of Gold', '19:00:00', 'Completed', 2),
-(5, 'Desert Ruins', '15:00:00', 'In Progress', 3);
+INSERT INTO Event (location, start_time, completion_status, campaign_id) VALUES
+('Castle of Shadows', '18:00:00', 'Completed', 1),
+('Forest of Whispers', '14:30:00', 'In Progress', 1),
+('Mountain Fortress', '20:00:00', 'Pending', 2),
+('City of Gold', '19:00:00', 'Completed', 2),
+('Desert Ruins', '15:00:00', 'In Progress', 3);
 
-INSERT INTO Combat_Encounter (combat_encounter_id, terrain, visibility, first_turn, turn_order, event_id) VALUES 
-(1, 'Forest', 'Low', 'Player 1', 'Player 1, Player 2, Monster A', 1),
-(2, 'Cave', 'Dark', 'Monster B', 'Monster B, Player 3, Player 1', 2),
-(3, 'Open Field', 'Clear', 'Player 2', 'Player 2, Player 3, Monster C', 3),
-(4, 'Dungeon', 'Dim', 'Player 1', 'Player 1, Monster D, Player 2', 4),
-(5, 'Ruins', 'Foggy', 'Player 3', 'Player 3, Monster E, Player 1', 5);
+INSERT INTO Combat_Encounter (terrain, visibility, first_turn, turn_order, event_id) VALUES
+('Forest', 'Low', 'Player 1', 'Player 1, Player 2, Monster A', 1),
+('Cave', 'Dark', 'Monster B', 'Monster B, Player 3, Player 1', 2),
+('Open Field', 'Clear', 'Player 2', 'Player 2, Player 3, Monster C', 3),
+('Dungeon', 'Dim', 'Player 1', 'Player 1, Monster D, Player 2', 4),
+('Ruins', 'Foggy', 'Player 3', 'Player 3, Monster E, Player 1', 5);
 
-INSERT INTO Social_Encounter (social_encounter_id, social_setting, action, event_id) VALUES 
-(1, 'Tavern', 'Negotiate with the bartender', 1),
-(2, 'Marketplace', 'Haggle for prices', 2),
-(3, 'Nobles Ball', 'Dance with a noble', 3),
-(4, 'Street Corner', 'Informally chat with locals', 4),
-(5, 'Library', 'Research ancient texts', 5);
+INSERT INTO Social_Encounter (social_setting, action, event_id) VALUES
+('Tavern', 'Negotiate with the bartender', 1),
+('Marketplace', 'Haggle for prices', 2),
+('Nobles Ball', 'Dance with a noble', 3),
+('Street Corner', 'Informally chat with locals', 4),
+('Library', 'Research ancient texts', 5);
 
 INSERT INTO Has_Feat (character_id, feat_name) VALUES 
 (1, 'Sharpshooter'),
@@ -121,10 +121,10 @@ INSERT INTO Ability_Score (character_id, name, modifier) VALUES
 (5, 'Charisma', 1);
 
 INSERT INTO Enroll (game_player_id, campaign_id, date_joined) VALUES
-(1001, 1, '2024-01-15'),
-(1002, 2, '2024-02-20'),
-(1003, 1, '2024-04-10'),
-(1004, 2, '2024-03-05');
+(1, 1, '2024-01-15'),
+(2, 2, '2024-02-20'),
+(3, 1, '2024-04-10'),
+(4, 2, '2024-03-05');
 
 INSERT INTO Skill (name, description) VALUES 
 ('Stealth', 'The ability to move silently and avoid detection'),

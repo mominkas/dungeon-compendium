@@ -6,6 +6,7 @@ import classDescription from "./classDescription.js";
 import classLevelFeatures from "./classLevelFeatures.js";
 import {getPool} from "../db.js";
 import species from "./species.js";
+import userRouter from './users.js';
 
 const router = express.Router();
 
@@ -22,6 +23,7 @@ router.use('/class', classRouter);
 router.use('/class_description', classDescription);
 router.use('/class_level_features', classLevelFeatures);
 router.use('/species', species);
+router.use('/users', userRouter);
 
 // generic endpoint handler function for SELECT *
 async function selectAll(req, res, tableName) {

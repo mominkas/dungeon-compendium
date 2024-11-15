@@ -49,14 +49,15 @@ CREATE TABLE Feat (
 );
 
 CREATE TABLE Participant (
-    participant_id INTEGER PRIMARY KEY,
+    participant_id SERIAL PRIMARY KEY,
     location VARCHAR(1000) NULL,
     name VARCHAR(100) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     experience_level INTEGER NULL
 );
 
 CREATE TABLE Character (
-    character_id INTEGER PRIMARY KEY,
+    character_id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     hair_color VARCHAR(100) NULL,
     eye_color VARCHAR(100) NULL,
@@ -98,7 +99,7 @@ CREATE TABLE Game_Master (
 );
 
 CREATE TABLE Campaign (
-    campaign_id INTEGER PRIMARY KEY,
+    campaign_id SERIAL PRIMARY KEY,
     campaign_name VARCHAR(100) NOT NULL,
     meeting_location VARCHAR(100) NULL,
     meeting_time TIME NULL,
@@ -122,7 +123,7 @@ CREATE TABLE Enroll (
 );
 
 CREATE TABLE Event (
-    event_id INTEGER PRIMARY KEY,
+    event_id SERIAL PRIMARY KEY,
     location VARCHAR(100) NOT NULL,
     start_time TIME NOT NULL,
     completion_status VARCHAR(100) NOT NULL,
@@ -131,7 +132,7 @@ CREATE TABLE Event (
 );
 
 CREATE TABLE Combat_Encounter (
-    combat_encounter_id INTEGER PRIMARY KEY,
+    combat_encounter_id SERIAL PRIMARY KEY,
     terrain VARCHAR(100) NULL,
     visibility VARCHAR(100) NULL,
     first_turn VARCHAR(100) NOT NULL,
@@ -141,7 +142,7 @@ CREATE TABLE Combat_Encounter (
 );
 
 CREATE TABLE Social_Encounter (
-    social_encounter_id INTEGER PRIMARY KEY,
+    social_encounter_id SERIAL PRIMARY KEY,
     social_setting VARCHAR(100) NULL,
     action VARCHAR(100) NOT NULL,
     event_id INTEGER NOT NULL,
