@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { getPool, terminateSession } from './db.js'; 
-import router from './routes/index.js'; 
+import { router } from './routes/index.js';
 
 const app = express();
 

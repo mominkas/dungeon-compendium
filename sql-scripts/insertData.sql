@@ -26,11 +26,11 @@ INSERT INTO Class(name, level) VALUES
 ('Rogue', 3);
 
 INSERT INTO Species (name, description, weight, height, type) VALUES 
-('Human', NULL, '140-250 lbs', 'Average', 'Humanoid'),
-('Elf', 'Graceful beings with a natural affinity for magic and nature, known for their long lifespans.', '100-145 lbs', 'Tall', 'Fey'),
-('Dwarf', 'Stout and hardy, dwarves are known for their strength, resilience, and craftsmanship.', '150-200 lbs', 'Short', 'Humanoid'),
-('Dragonborn', 'Descendants of dragons, dragonborn are proud warriors with a strong sense of honor.', '250-350 lbs', 'Tall', 'Draconic'),
-('Halfling', 'Small and nimble, halflings are known for their luck and ability to stay out of danger.', '40-45 lbs', 'Short', 'Humanoid');
+('Human', NULL, '140', 'Average', 'Humanoid'),
+('Elf', 'Graceful beings with a natural affinity for magic and nature, known for their long lifespans.', '100', 'Tall', 'Fey'),
+('Dwarf', 'Stout and hardy, dwarves are known for their strength, resilience, and craftsmanship.', '150', 'Short', 'Humanoid'),
+('Dragonborn', 'Descendants of dragons, dragonborn are proud warriors with a strong sense of honor.', '250', 'Tall', 'Draconic'),
+('Halfling', 'Small and nimble, halflings are known for their luck and ability to stay out of danger.', '40', 'Short', 'Humanoid');
 
 INSERT INTO Feat (name, target_skill, description, modifier, requirement) VALUES 
 ('Mobile', 'DEX', 'Your speed increases by 10 feet, and difficult terrain does not hinder you when you dash.', 2, NULL),
@@ -72,21 +72,21 @@ INSERT INTO Campaign (campaign_name, meeting_location, meeting_time, setting, di
 ('Tales from the Yawning Portal', 'Stanley Park', '20:00:00', NULL, 'Medium', 5, 5, 'A collection of classic D&D adventures.', '2024-04-10', 5),
 ('Descent into Avernus', 'Dundas Square', '16:00:00', 'Avernus', NULL, 6, 2, NULL, '2024-05-15', 5);
 
-INSERT INTO Event (location, start_time, completion_status, campaign_id) VALUES 
+INSERT INTO Event (location, start_time, completion_status, campaign_id) VALUES
 ('Castle of Shadows', '18:00:00', 'Completed', 1),
 ('Forest of Whispers', '14:30:00', 'In Progress', 1),
 ('Mountain Fortress', '20:00:00', 'Pending', 2),
 ('City of Gold', '19:00:00', 'Completed', 2),
 ('Desert Ruins', '15:00:00', 'In Progress', 3);
 
-INSERT INTO Combat_Encounter (terrain, visibility, first_turn, turn_order, event_id) VALUES 
+INSERT INTO Combat_Encounter (terrain, visibility, first_turn, turn_order, event_id) VALUES
 ('Forest', 'Low', 'Player 1', 'Player 1, Player 2, Monster A', 1),
 ('Cave', 'Dark', 'Monster B', 'Monster B, Player 3, Player 1', 2),
 ('Open Field', 'Clear', 'Player 2', 'Player 2, Player 3, Monster C', 3),
 ('Dungeon', 'Dim', 'Player 1', 'Player 1, Monster D, Player 2', 4),
 ('Ruins', 'Foggy', 'Player 3', 'Player 3, Monster E, Player 1', 5);
 
-INSERT INTO Social_Encounter (social_setting, action, event_id) VALUES 
+INSERT INTO Social_Encounter (social_setting, action, event_id) VALUES
 ('Tavern', 'Negotiate with the bartender', 1),
 ('Marketplace', 'Haggle for prices', 2),
 ('Nobles Ball', 'Dance with a noble', 3),
@@ -120,7 +120,7 @@ INSERT INTO Ability_Score (character_id, name, modifier) VALUES
 (4, 'Strength', 1),
 (5, 'Charisma', 1);
 
-INSERT INTO Enrol (game_player_id, campaign_id, date_joined) VALUES
+INSERT INTO Enroll (game_player_id, campaign_id, date_joined) VALUES
 (1, 1, '2024-01-15'),
 (2, 2, '2024-02-20'),
 (3, 1, '2024-04-10'),
