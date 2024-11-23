@@ -35,7 +35,7 @@ CREATE TABLE Class (
 CREATE TABLE Species (
     name VARCHAR(100) PRIMARY KEY,
     description VARCHAR(1000) NULL,
-    weight VARCHAR(100) NOT NULL,
+    weight INTEGER NOT NULL,
     height VARCHAR(100) NOT NULL,
     type VARCHAR(100) NOT NULL
 );
