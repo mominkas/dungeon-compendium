@@ -1,11 +1,17 @@
 import express from 'express';
 import {getPool} from "../db.js";
-import {selectAll} from "./index.js";
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-    await selectAll(req, res, 'class_description')
+    try {
+        const pool = await getPool();
+        const query = `SELECT * FROM class_description ORDER BY name`;
+        const result = await pool.query(query);
+        res.status(200).json(result.rows);
+    } catch (err) {
+        res.status(400).json(err.message);
+    }
 });
 
 // INSERT

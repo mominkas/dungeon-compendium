@@ -40,3 +40,13 @@
 .read-the-docs {
   color: #888;
 }
+
+.alert {
+  max-width: 500px;
+  margin: 0 auto;
+  word-wrap: break-word;
+}
+
+.nav-item {
+  border: none;
+}

@@ -69,7 +69,7 @@ router.post('/selection', async (req, res) => {
             const {attr, op, val} = cond;
             if (attr === "weight") {
                 if (op === "like") { throw new Error("Weight cannot use 'like' operator."); }
-                if (isNaN(val)) { throw new Error(`Weight cannot be compared to string '${val}'`); }
+                if (isNaN(Number(val))) { throw new Error(`Weight cannot be compared to string '${val}'`); }
             }
             parts.push(`${attr} ${op} '${val}'`);
             parts.push(clauses[index]);
