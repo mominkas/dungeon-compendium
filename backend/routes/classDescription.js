@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
         const result = await pool.query(query);
         res.status(200).json(result.rows);
     } catch (err) {
-        res.status(400).json(err.message);
+        res.status(400).json({error: err.message});
     }
 });
 
@@ -36,7 +36,7 @@ router.post('/', async (req, res) => {
 
         res.status(200).json(insertClassDescription.rows[0]);
     } catch (err) {
-        res.status(400).json(err.message);
+        res.status(400).json({error: err.message});
     }
 });
 
@@ -64,7 +64,7 @@ router.put('/:name', async (req, res) => {
         );
         res.status(200).json(updateDesc.rows[0]);
     } catch (err) {
-       res.status(400).json(err.message);
+        res.status(400).json({error: err.message});
     }
 });
 
@@ -81,7 +81,7 @@ router.delete('/:name', async (req, res) => {
 
         res.status(200).json(deleteClassDesc.rows[0]);
     } catch (err) {
-        res.status(400).json(err.message);
+        res.status(400).json({error: err.message});
     }
 });
 

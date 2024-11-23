@@ -50,3 +50,13 @@
 .nav-item {
   border: none;
 }
+
+.custom-add-btn {
+  height: calc(1.5em + .75rem + 2px);
+}
+
+.custom-h6-label {
+    margin: 0 8px 0 0;
+    padding: 8px 0 8px 0;
+    text-wrap: nowrap;
+}

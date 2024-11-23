@@ -1,11 +1,11 @@
 import {useEffect, useState} from 'react';
-import ClassInput from "./ClassInput.tsx";
+import ClassInput from "../components/ClassInput.tsx";
 import {Alert, Navbar, NavItem, Table} from "react-bootstrap";
 import { Routes, Route, Link, useLocation  } from "react-router-dom";
-import ClassDescription from "./ClassDescription.tsx";
-import ClassLevelFeatures from "./ClassLevelFeatures.tsx";
+import ClassDescription from "../components/ClassDescription.tsx";
+import ClassLevelFeatures from "../components/ClassLevelFeatures.tsx";
 
-const ClassView = () => {
+const ClassPage = () => {
     const [classes, setClasses] = useState([]);
     const [showAlert, setShowAlert] = useState(false);
     const [alertVariant, setAlertVariant] = useState("secondary");
@@ -16,32 +16,32 @@ const ClassView = () => {
         setShowAlert(true);
         setTimeout(() => {
             setShowAlert(false);
-        }, 2000);
+        }, 3000);
     }
 
     const onInputSuccess = (name, level) => {
-        const successMessage = `SUCCESS! Added ${name} ${level}`;
+        const successMessage = `SUCCESS! Added ${name} ${level}.`;
         setAlertMessage(successMessage);
         setAlertVariant("success");
         alertTimeout();
     }
 
     const onInputFailure = (name, level, err) => {
-        const failureMessage = `WARNING! Failed to add ${name} ${level}. Error: ${err}`;
+        const failureMessage = `WARNING! Failed to add ${name} ${level}. Error: ${err}.`;
         setAlertMessage(failureMessage);
         setAlertVariant("danger");
         alertTimeout();
     }
 
     const onDeleteSuccess = (name, level) => {
-        const successMessage = `SUCCESS! Deleted ${name} ${level}`;
+        const successMessage = `SUCCESS! Deleted ${name} ${level}.`;
         setAlertMessage(successMessage);
         setAlertVariant("success");
         alertTimeout();
     }
 
     const onDeleteFailure = (name, level, err) => {
-        const failureMessage = `WARNING! Failed to delete ${name} ${level} Error: ${err}`;
+        const failureMessage = `WARNING! Failed to delete ${name} ${level}. Error: ${err}.`;
         setAlertMessage(failureMessage);
         setAlertVariant("danger");
         alertTimeout();
@@ -67,7 +67,6 @@ const ClassView = () => {
 
             setClasses(data);
             setTriggerReload(false);
-            console.log(data);
         } catch (error) {
             console.error("Error fetching classes:", error);
         }
@@ -141,4 +140,4 @@ const ClassView = () => {
     );
 };
 
-export default ClassView;
+export default ClassPage;

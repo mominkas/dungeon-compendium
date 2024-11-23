@@ -11,7 +11,6 @@ const ClassDescription = () => {
                 const data = await response.json();
 
                 setDesc(data);
-                console.log(data);
             } catch (error) {
                 console.error("Error fetching class descriptions:", error);
             }

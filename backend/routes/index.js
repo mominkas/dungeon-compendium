@@ -25,7 +25,7 @@ router.use('/class_level_features', classLevelFeatures);
 router.use('/species', species);
 router.use('/users', userRouter);
 
-// generic endpoint handler function for SELECT *
+// generic endpoint handler function for SELECT * with no order
 async function selectAll(req, res, tableName) {
     try {
         const pool = await getPool();
@@ -37,4 +37,8 @@ async function selectAll(req, res, tableName) {
     }
 }
 
-export {router, selectAll}
+// common postgres violation codes
+const PK_DUPLICATE_CODE = 23505;
+const FK_VIOLATION_CODE = 23503;
+
+export {router, selectAll, PK_DUPLICATE_CODE, FK_VIOLATION_CODE}
