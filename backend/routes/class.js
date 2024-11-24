@@ -49,21 +49,4 @@ router.post('/', async (req, res) => {
     }
 });
 
-// DELETE
-router.delete('/:name/:level', async (req, res) => {
-    try {
-        const {name, level} = req.params;
-        const pool = await getPool();
-
-        const deleteClass = await pool.query(
-            "DELETE FROM class WHERE name = $1 AND level = $2 RETURNING *",
-            [name, level]
-        );
-
-        res.status(200).json(deleteClass.rows[0]);
-    } catch (err) {
-        res.status(400).json({error: err.message});
-    }
-});
-
 export default router

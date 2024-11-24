@@ -39,7 +39,7 @@ const ClassDescProject = ({updateDesc}) => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch(`http://localhost:5001/class_description/projection`, {
+            const response = await fetch(`http://localhost:5001/class_description/`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ attributes: selectedAttrs }),
@@ -77,7 +77,7 @@ const ClassDescProject = ({updateDesc}) => {
                     ))}
                 </Form>
             </div>
-            <div className="d-flex justify-content-end mt-2">
+            <div className="d-flex justify-content-end mt-3">
                 <Button
                     className="mr-2"
                     variant="secondary"

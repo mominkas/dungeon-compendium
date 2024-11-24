@@ -41,29 +41,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-// UPDATE with any number of custom values
-router.put('/:level', async (req, res) => {
-    try {
-        const {level} = req.params;
-        const {num_hit_die, advantage_effect, modifier_effect} = req.body;
-        const query = `
-            UPDATE class_level_features
-            SET
-                num_hit_die = COALESCE($2, num_hit_die),
-                advantage_effect = COALESCE($3, advantage_effect),
-                modifier_effect = COALESCE($4, modifier_effect)
-            WHERE level = $1
-            RETURNING *;
-        `;
-
-        const pool = await getPool();
-        const updateFeatures = await pool.query(query, [level, num_hit_die, advantage_effect, modifier_effect]);
-        res.status(200).json(updateFeatures.rows[0]);
-    } catch (err) {
-        res.status(400).json({error: err.message});
-    }
-});
-
 // DELETE will cascade
 router.delete('/:level', async (req, res) => {
     try {

@@ -8,51 +8,8 @@ router.get('/', async (req, res) => {
     await selectAll(req, res, 'species');
 });
 
-// INSERT
-router.post('/', async (req, res) => {
-    try {
-        const {name, description, weight, height, type} = req.body;
-        const pool = await getPool();
-
-        const insertSpecies = await pool.query(
-            "INSERT INTO species VALUES ($1, $2, $3, $4, $5) RETURNING *",
-            [name, description, weight, height, type]
-        );
-
-        res.status(200).json(insertSpecies.rows[0]);
-    } catch (err) {
-        res.status(400).json({error: err.message});
-    }
-});
-
-// Projection: user can choose any number of attributes to view
-router.post('/projection', async (req, res) => {
-    try {
-        const {attributes} = req.body;
-
-        if (!Array.isArray(attributes) || attributes.length === 0) {
-            return res.status(200).json({message: "Attributes should be non-empty array"});
-        }
-
-        const validAttrs = ["name", "description", "weight", "height", "type"];
-        const selectedAttrs = attributes.filter(attr => validAttrs.includes(attr));
-
-        if (selectedAttrs.length === 0) {
-            return res.status(400).json({error: "No valid attributes selected"});
-        }
-
-        const query = `SELECT ${attributes.join(", ")} FROM species`;
-        const pool = await getPool();
-        const selectSpecies = await pool.query(query);
-
-        res.status(200).json(selectSpecies.rows);
-    } catch (err) {
-        res.status(400).json({error: err.message});
-    }
-});
-
 // Selection: user can search for tuples using AND/OR clauses and combination of attributes
-router.post('/selection', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
         const {conditions, clauses} = req.body;
         const pool = await getPool();
@@ -78,47 +35,6 @@ router.post('/selection', async (req, res) => {
         console.log(query);
         const selectSpecies = await pool.query(query);
         res.status(200).json(selectSpecies.rows);
-    } catch (err) {
-        res.status(400).json({error: err.message});
-    }
-});
-
-// UPDATE with any number of custom values
-router.put('/:name', async (req, res) => {
-    try {
-        const {name} = req.params;
-        const {description, weight, height, type} = req.body;
-        const query = `
-            UPDATE species
-            SET
-                description = COALESCE($2, description),
-                weight = COALESCE($3, weight),
-                height = COALESCE($4, height),
-                type = COALESCE($5, type)
-            WHERE name = $1
-            RETURNING *;
-        `;
-
-        const pool = await getPool();
-        const updateSpecies = await pool.query(query, [name, description, weight, height, type]);
-        res.status(200).json(updateSpecies.rows[0]);
-    } catch (err) {
-        res.status(400).json({error: err.message});
-    }
-});
-
-// DELETE
-router.delete('/:name', async (req, res) => {
-    try {
-        const {name} = req.params;
-        const pool = await getPool();
-
-        const deleteSpecies = await pool.query(
-            "DELETE FROM species WHERE name = $1 RETURNING *",
-            [name]
-        );
-
-        res.status(200).json(deleteSpecies.rows[0]);
     } catch (err) {
         res.status(400).json({error: err.message});
     }
