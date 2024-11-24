@@ -54,7 +54,7 @@
 .form-check {
   display: flex;
   align-items: center;
-  margin-left: 10px;
+  margin-right: 16px;
 }
 
 .custom-add-btn {
@@ -62,7 +62,7 @@
 }
 
 .custom-h6-label {
-    margin: 0 8px 0 0;
+    margin: 0 16px 0 0;
     padding: 8px 0 8px 0;
     text-wrap: nowrap;
 }

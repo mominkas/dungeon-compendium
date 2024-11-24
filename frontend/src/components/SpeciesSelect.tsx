@@ -30,6 +30,7 @@ const SpeciesSelect = ({updateSpecies}) => {
                 {speciesAttrs.map((attr) => (
                     <Form.Check
                         type="checkbox"
+                        id={attr.name}
                         label={attr.name}
                         checked={selectedAttrs.includes(attr.id)}
                         onChange={handleChange}
