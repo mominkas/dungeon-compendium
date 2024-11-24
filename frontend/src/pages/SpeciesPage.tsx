@@ -4,61 +4,52 @@ import SpeciesSelect from "../components/SpeciesSelect.tsx";
 
 const SpeciesPage = () => {
     const [species, setSpecies] = useState([]);
-    const [selectedAttrs, setSelectedAttrs] = useState([]);
-    const speciesAttrs = [
-        { id: "name", name: "Name" },
-        { id: "description", name: "Description" },
-        { id: "weight", name: "Weight" },
-        { id: "height", name: "Height" },
-        { id: "type", name: "Type" }
-    ];
-
-    const fetchData = async (selectedAttrs) => {
-        try {
-            const response = await fetch(`http://localhost:5001/species/projection`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ attributes: selectedAttrs }),
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                setSpecies(data);
-            }
-        } catch (error) {
-            console.error("Error fetching species:", error);
-            setSpecies([]);
-        }
-    };
 
     useEffect(() => {
-        fetchData(selectedAttrs);
-    }, [selectedAttrs]);
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`http://localhost:5001/species`);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setSpecies(data);
+                }
+            } catch (error) {
+                console.error("Error fetching species:", error);
+                setSpecies([]);
+            }
+        }
+        fetchData();
+    }, []);
 
     return (
         <>
             <h1>🐉️ D&D Species 🐉</h1>
-            <SpeciesSelect updateSpecies={setSelectedAttrs} />
-            <Table className="mt-5">
+            <SpeciesSelect/>
+            <Table className="mt-3">
                 <thead>
                 <tr>
-                    {speciesAttrs.map((attr) => (
-                        <th key={attr.id}>{attr.name}</th>
-                    ))}
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Weight (lbs)</th>
+                    <th>Height</th>
+                    <th>Type</th>
                 </tr>
                 </thead>
                 <tbody>
                 {species.length > 0 ? (
                     species.map((item) => (
                         <tr key={item.name}>
-                            {speciesAttrs.map((attr) =>
-                                    <td key={attr.id}>{item[attr.id] || ""}</td>
-                            )}
+                            <td>{item.name}</td>
+                            <td>{item.description}</td>
+                            <td>{item.weight}</td>
+                            <td>{item.height}</td>
+                            <td>{item.type}</td>
                         </tr>
                     ))
                 ) : (
                     <tr>
-                        <td colSpan={speciesAttrs.length}>No columns selected.</td>
+                        <td colSpan="5">No species from your search. Please try again!</td>
                     </tr>
                 )}
                 </tbody>
