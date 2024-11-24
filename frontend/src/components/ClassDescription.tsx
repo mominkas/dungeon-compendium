@@ -36,7 +36,7 @@ const ClassDescription = () => {
                     ))
                 ) : (
                     <tr>
-                        <td colSpan={classDescAttrs.length}>No columns selected.</td>
+                        <td colSpan={classDescAttrs.length}>No columns selected. Please select columns to view!</td>
                     </tr>
                 )}
                 </tbody>

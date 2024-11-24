@@ -31,11 +31,13 @@ const ClassDescProject = ({updateDesc}) => {
         setSelectedAttrs([]);
     }
 
-    useEffect(() => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        fetchData();
         updateDesc(selectedAttrs);
-    }, [selectedAttrs, updateDesc]);
+    }
 
-    const fetchData = async (selectedAttrs) => {
+    const fetchData = async () => {
         try {
             const response = await fetch(`http://localhost:5001/class_description/projection`, {
                 method: "POST",
@@ -54,13 +56,13 @@ const ClassDescProject = ({updateDesc}) => {
     };
 
     useEffect(() => {
-        fetchData(selectedAttrs);
-    }, [selectedAttrs]);
+        fetchData();
+    }, []);
 
     return (
         <div className="flex-column justify-content-start align-content-start align-items-start">
             <div className="d-flex justify-content-center align-items-center">
-                <h6 className="custom-h6-label">Select columns</h6>
+                <h6 className="custom-h6-label">Select columns to view</h6>
                 <Form className="d-flex flex-row">
                     {classDescAttrs.map((attr) => (
                         <Form.Check
@@ -76,8 +78,23 @@ const ClassDescProject = ({updateDesc}) => {
                 </Form>
             </div>
             <div className="d-flex justify-content-end mt-2">
-                <Button className="mr-2" onClick={handleSelectAll}>Select All</Button>
-                <Button className="mr-2" onClick={handleDeselectAll}>Deselect All</Button>
+                <Button
+                    className="mr-2"
+                    variant="secondary"
+                    onClick={handleSelectAll}>
+                    Select All
+                </Button>
+                <Button
+                    className="mr-2"
+                    variant="secondary"
+                    onClick={handleDeselectAll}>
+                    Deselect All
+                </Button>
+                <Button
+                    className="mr-2"
+                    onClick={handleSubmit}>
+                    Submit
+                </Button>
             </div>
         </div>
 
