@@ -6,7 +6,7 @@ const ClassLevelFeatures = ({setTriggerReload}) => {
     const [desc, setDesc] = useState([]);
     const [level, setLevel] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
-    const [alertVariant, setAlertVariant] = useState("secondary");
+    const [alertVariant, setAlertVariant] = useState("");
     const [alertMessage, setAlertMessage] = useState("");
     const [showModal, setShowModal] = useState(false);
 
@@ -18,28 +18,28 @@ const ClassLevelFeatures = ({setTriggerReload}) => {
     }
 
     const onInputSuccess = (level) => {
-        const successMessage = `SUCCESS! Added Level ${level}.`;
+        const successMessage = `Added Level ${level}.`;
         setAlertMessage(successMessage);
         setAlertVariant("success");
         alertTimeout();
     }
 
     const onInputFailure = (level, err) => {
-        const failureMessage = `WARNING! Failed to add Level ${level}. Error: ${err}.`;
+        const failureMessage = `Failed to add Level ${level}. Error: ${err}.`;
         setAlertMessage(failureMessage);
         setAlertVariant("danger");
         alertTimeout();
     }
 
     const onDeleteSuccess = (level) => {
-        const successMessage = `SUCCESS! Deleted Level ${level}`;
+        const successMessage = `Deleted Level ${level}`;
         setAlertMessage(successMessage);
         setAlertVariant("success");
         alertTimeout();
     }
 
     const onDeleteFailure = (level, err) => {
-        const failureMessage = `WARNING! Failed to delete Level ${level} Error: ${err}`;
+        const failureMessage = `Failed to delete Level ${level} Error: ${err}`;
         setAlertMessage(failureMessage);
         setAlertVariant("danger");
         alertTimeout();
@@ -93,7 +93,7 @@ const ClassLevelFeatures = ({setTriggerReload}) => {
                 onFailure={onInputFailure}
                 updateClassLevelFeatures={fetchData}
             />
-            <Table className="table mt-5 text-center">
+            <Table className="mt-5">
                 <thead>
                 <tr>
                     <th>Level</th>
@@ -136,7 +136,10 @@ const ClassLevelFeatures = ({setTriggerReload}) => {
                 <Modal.Header>
                     <Modal.Title>Delete Class Level Feature</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Are you sure you want to delete features for Level {level}?</Modal.Body>
+                <Modal.Body>
+                    Are you sure you want to delete features for Level {level}?
+                    Deleting features here will delete Classes and Characters associated with Level {level}.
+                </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseModal}>
                         No

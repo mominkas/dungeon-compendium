@@ -20,7 +20,7 @@ const ClassDescription = () => {
 
     return (
         <>
-            <Table className="table mt-5 text-center">
+            <Table className="mt-3">
                 <thead>
                 <tr>
                     <th>Name</th>

@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
 
         const errors = validateErrors({level, num_hit_die, advantage_effect, modifier_effect});
         if (errors.length > 0) {
-            return res.status(400).json({error: errors.join(" ")});
+            return res.status(400).json({error: errors.join(". ")});
         }
 
         const pool = await getPool();

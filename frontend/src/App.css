@@ -51,8 +51,14 @@
   border: none;
 }
 
+.form-check {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
 .custom-add-btn {
-  height: calc(1.5em + .75rem + 2px);
+  height: calc(1.5em + .75rem + 2px); /*height of form-control*/
 }
 
 .custom-h6-label {

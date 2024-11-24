@@ -20,28 +20,28 @@ const ClassPage = () => {
     }
 
     const onInputSuccess = (name, level) => {
-        const successMessage = `SUCCESS! Added ${name} ${level}.`;
+        const successMessage = `Added ${name} ${level}.`;
         setAlertMessage(successMessage);
         setAlertVariant("success");
         alertTimeout();
     }
 
     const onInputFailure = (name, level, err) => {
-        const failureMessage = `WARNING! Failed to add ${name} ${level}. Error: ${err}.`;
+        const failureMessage = `Failed to add ${name} ${level}. Error: ${err}.`;
         setAlertMessage(failureMessage);
         setAlertVariant("danger");
         alertTimeout();
     }
 
     const onDeleteSuccess = (name, level) => {
-        const successMessage = `SUCCESS! Deleted ${name} ${level}.`;
+        const successMessage = `Deleted ${name} ${level}.`;
         setAlertMessage(successMessage);
         setAlertVariant("success");
         alertTimeout();
     }
 
     const onDeleteFailure = (name, level, err) => {
-        const failureMessage = `WARNING! Failed to delete ${name} ${level}. Error: ${err}.`;
+        const failureMessage = `Failed to delete ${name} ${level}. Error: ${err}.`;
         setAlertMessage(failureMessage);
         setAlertVariant("danger");
         alertTimeout();
@@ -100,7 +100,7 @@ const ClassPage = () => {
                     onFailure={onInputFailure}
                     updateClasses={fetchData}
                 />
-                <Table className="table mt-5 text-center">
+                <Table className="mt-5">
                     <thead>
                     <tr>
                         <th>Name</th>

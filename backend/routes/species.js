@@ -25,14 +25,13 @@ router.post('/', async (req, res) => {
     }
 });
 
-
 // Projection: user can choose any number of attributes to view
 router.post('/projection', async (req, res) => {
     try {
         const {attributes} = req.body;
 
         if (!Array.isArray(attributes) || attributes.length === 0) {
-            return res.status(400).json({error: "Attributes must be non-empty array"});
+            return res.status(200).json({message: "Attributes should be non-empty array"});
         }
 
         const validAttrs = ["name", "description", "weight", "height", "type"];
@@ -43,7 +42,6 @@ router.post('/projection', async (req, res) => {
         }
 
         const query = `SELECT ${attributes.join(", ")} FROM species`;
-
         const pool = await getPool();
         const selectSpecies = await pool.query(query);
 
