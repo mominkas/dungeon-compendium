@@ -42,7 +42,7 @@ const ClassInput = ({ onSuccess, onFailure, updateClasses }) => {
     const canSubmit = form.name && form.level;
 
     return (
-        <div className="d-flex justify-content-center align-content-center">
+        <div className="d-flex justify-content-center align-items-center">
             <h6 className="custom-h6-label">Add a class</h6>
             <Form
                 className="d-flex justify-content-center"

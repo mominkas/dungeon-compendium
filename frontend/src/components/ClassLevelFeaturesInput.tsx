@@ -46,7 +46,7 @@ const ClassLevelFeaturesInput = ({ onSuccess, onFailure, updateClassLevelFeature
     const canSubmit = form.level && form.num_hit_die && form.advantage_effect && form.modifier_effect;
 
     return (
-        <div className="d-flex justify-content-center align-content-center">
+        <div className="d-flex justify-content-center align-items-center">
             <h6 className="custom-h6-label">Add a level</h6>
             <Form
                 className="d-flex justify-content-center"

@@ -33,33 +33,6 @@ const ClassPage = () => {
         alertTimeout();
     }
 
-    const onDeleteSuccess = (name, level) => {
-        const successMessage = `Deleted ${name} ${level}.`;
-        setAlertMessage(successMessage);
-        setAlertVariant("success");
-        alertTimeout();
-    }
-
-    const onDeleteFailure = (name, level, err) => {
-        const failureMessage = `Failed to delete ${name} ${level}. Error: ${err}.`;
-        setAlertMessage(failureMessage);
-        setAlertVariant("danger");
-        alertTimeout();
-    }
-
-    const deleteClass = async (name, level) => {
-        try {
-            await fetch(`http://localhost:5001/class/${name}/${level}` , {
-               method: "DELETE"
-            });
-            setClasses(classes.filter((item) => item.name !== name || item.level !== level));
-            onDeleteSuccess(name, level);
-        } catch (err) {
-            console.error("Error deleting class: ", err);
-            onDeleteFailure(name, level, err);
-        }
-    }
-
     const fetchData = async () => {
         try {
             const response = await fetch('http://localhost:5001/class');
@@ -105,7 +78,6 @@ const ClassPage = () => {
                     <tr>
                         <th>Name</th>
                         <th>Level</th>
-                        <th>Delete</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -114,13 +86,6 @@ const ClassPage = () => {
                             <tr key={[item.name, item.level]}>
                                 <td>{item.name}</td>
                                 <td>{item.level}</td>
-                                <td>
-                                    <button
-                                        className='btn btn-danger'
-                                        onClick={() => deleteClass(item.name, item.level)}>
-                                        Delete
-                                    </button>
-                                </td>
                             </tr>
                         ))
                     ) : (
