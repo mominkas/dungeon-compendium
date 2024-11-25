@@ -50,7 +50,7 @@ router.post('/new-user', async (req,res) => {
 })
 
 // login
-router.get('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
     try {
         const db = await getPool();
         const { name, password } = req.body;
