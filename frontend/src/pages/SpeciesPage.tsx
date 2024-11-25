@@ -1,38 +1,48 @@
-import { useEffect, useState } from "react";
-import { Table } from "react-bootstrap";
+import { useState } from "react";
+import {Alert, Table} from "react-bootstrap";
 import SpeciesSelect from "../components/SpeciesSelect.tsx";
 
 const SpeciesPage = () => {
     const [species, setSpecies] = useState([]);
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertVariant, setAlertVariant] = useState("secondary");
+    const [alertMessage, setAlertMessage] = useState("");
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`http://localhost:5001/species`);
+    const alertTimeout = () => {
+        setShowAlert(true);
+        setTimeout(() => {
+            setShowAlert(false);
+        }, 3000);
+    }
 
-                if (response.ok) {
-                    const data = await response.json();
-                    setSpecies(data);
-                }
-            } catch (error) {
-                console.error("Error fetching species:", error);
-                setSpecies([]);
-            }
-        }
-        fetchData();
-    }, []);
+    const onSuccess = () => {
+        setAlertMessage("Loaded search results.");
+        setAlertVariant("success");
+        alertTimeout();
+    }
+
+    const onFailure = (err) => {
+        const failureMessage = `Error: ${err}.`;
+        setAlertMessage(failureMessage);
+        setAlertVariant("danger");
+        alertTimeout();
+    }
 
     return (
         <>
             <h1>🐉️ D&D Species 🐉</h1>
-            <SpeciesSelect/>
+            <SpeciesSelect
+                onSuccess={onSuccess}
+                onFailure={onFailure}
+                updateSpecies={setSpecies}
+            />
             <Table className="mt-3">
                 <thead>
                 <tr>
                     <th>Name</th>
                     <th>Description</th>
-                    <th>Weight (lbs)</th>
-                    <th>Height</th>
+                    <th>Weight (kg)</th>
+                    <th>Height (cm)</th>
                     <th>Type</th>
                 </tr>
                 </thead>
@@ -49,11 +59,16 @@ const SpeciesPage = () => {
                     ))
                 ) : (
                     <tr>
-                        <td colSpan="5">No species from your search. Please try again!</td>
+                        <td colSpan="5">No species results from your search. Please try again!</td>
                     </tr>
                 )}
                 </tbody>
             </Table>
+            {showAlert && <Alert
+                show={showAlert}
+                variant={alertVariant}>
+                {alertMessage}
+            </Alert>}
         </>
     );
 };

@@ -40,8 +40,8 @@ const ClassPage = () => {
 
             setClasses(data);
             setTriggerReload(false);
-        } catch (error) {
-            console.error("Error fetching classes:", error);
+        } catch (err) {
+            console.error("Error fetching classes:", err);
         }
     }
 

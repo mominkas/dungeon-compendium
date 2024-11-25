@@ -26,11 +26,11 @@ INSERT INTO Class(name, level) VALUES
 ('Rogue', 3);
 
 INSERT INTO Species (name, description, weight, height, type) VALUES 
-('Human', NULL, '140', 'Average', 'Humanoid'),
-('Elf', 'Graceful beings with a natural affinity for magic and nature, known for their long lifespans.', '100', 'Tall', 'Fey'),
-('Dwarf', 'Stout and hardy, dwarves are known for their strength, resilience, and craftsmanship.', '150', 'Short', 'Humanoid'),
-('Dragonborn', 'Descendants of dragons, dragonborn are proud warriors with a strong sense of honor.', '250', 'Tall', 'Draconic'),
-('Halfling', 'Small and nimble, halflings are known for their luck and ability to stay out of danger.', '40', 'Short', 'Humanoid');
+('Human', NULL, '63', '160', 'Humanoid'),
+('Elf', 'Graceful beings with a natural affinity for magic and nature, known for their long lifespans.', '45', '183', 'Fey'),
+('Dwarf', 'Stout and hardy, dwarves are known for their strength, resilience, and craftsmanship.', '68', '140', 'Humanoid'),
+('Dragonborn', 'Descendants of dragons, dragonborn are proud warriors with a strong sense of honor.', '113', '190', 'Draconic'),
+('Halfling', 'Small and nimble, halflings are known for their luck and ability to stay out of danger.', '20', '110', 'Humanoid');
 
 INSERT INTO Feat (name, target_skill, description, modifier, requirement) VALUES 
 ('Mobile', 'DEX', 'Your speed increases by 10 feet, and difficult terrain does not hinder you when you dash.', 2, NULL),

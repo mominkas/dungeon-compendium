@@ -62,9 +62,9 @@ const validateErrors = (features) => {
     const errors = [];
 
     for (const [key, value] of Object.entries(features)) {
-        if (!value || value.trim() === "") {
+        if (!value) {
             errors.push(`No ${key} provided`);
-        } else if (isNaN(Number(value))) {
+        } else if (isNaN(Number(value)) || value.trim() === "") {
             errors.push(`${key} must be a valid number`);
         }
     }

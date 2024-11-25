@@ -97,7 +97,7 @@ const ClassLevelFeatures = ({setTriggerReload}) => {
                 <thead>
                 <tr>
                     <th>Level</th>
-                    <th>Num Hit Die</th>
+                    <th>Number of Hit Die</th>
                     <th>Advantage Effect</th>
                     <th>Modifier Effect</th>
                     <th>Delete</th>

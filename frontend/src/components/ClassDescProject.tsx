@@ -39,7 +39,7 @@ const ClassDescProject = ({updateDesc}) => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch(`http://localhost:5001/class_description/`, {
+            const response = await fetch(`http://localhost:5001/class_description`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ attributes: selectedAttrs }),
@@ -49,8 +49,8 @@ const ClassDescProject = ({updateDesc}) => {
                 const data = await response.json();
                 updateDesc(data);
             }
-        } catch (error) {
-            console.error("Error fetching class descriptions:", error);
+        } catch (err) {
+            console.error("Error fetching class descriptions:", err);
             updateDesc([]);
         }
     };
@@ -93,7 +93,7 @@ const ClassDescProject = ({updateDesc}) => {
                 <Button
                     className="mr-2"
                     onClick={handleSubmit}>
-                    Submit
+                    View
                 </Button>
             </div>
         </div>
