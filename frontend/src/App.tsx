@@ -8,7 +8,7 @@ function App() {
 
   return (
       <>
-          <Router>
+          <Router> {/* router setup: https://youtu.be/U7oPfhHAzLc?si=fnu5_Y85XM_0MJ_3 */}
               <Navbar className="d-flex flex-row justify-content-center">
                   <NavItem className="list-group-item"><Link to="/">Home</Link></NavItem>
                   <NavItem className="list-group-item"><Link to="/classes">Classes</Link></NavItem>

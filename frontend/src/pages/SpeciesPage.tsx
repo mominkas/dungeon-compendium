@@ -5,7 +5,7 @@ import SpeciesSelect from "../components/SpeciesSelect.tsx";
 const SpeciesPage = () => {
     const [species, setSpecies] = useState([]);
     const [showAlert, setShowAlert] = useState(false);
-    const [alertVariant, setAlertVariant] = useState("secondary");
+    const [alertVariant, setAlertVariant] = useState("");
     const [alertMessage, setAlertMessage] = useState("");
 
     const alertTimeout = () => {

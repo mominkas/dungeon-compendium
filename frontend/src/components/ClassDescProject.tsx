@@ -11,7 +11,7 @@ const ClassDescProject = ({updateDesc}) => {
         { id: "armor_proficiency", name: "Armor Proficiency" },
         { id: "hit_die", name: "Hit Die" },
         { id: "saving_throw_proficiency", name: "Saving Throw Proficiency" }
-    ];
+    ]; // id/name setup: https://www.geeksforgeeks.org/how-to-use-multi-select-dropdown-in-react-bootstrap/
 
     const handleChange = (e) => {
         const attrId = e.target.value;

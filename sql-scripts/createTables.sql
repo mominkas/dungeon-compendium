@@ -1,3 +1,4 @@
+-- postgres drop tables loop: https://www.geeksforgeeks.org/how-to-drop-all-tables-from-postgresql-1/
 DO $$
     DECLARE
         r RECORD;

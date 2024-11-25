@@ -2,16 +2,15 @@ import {Button, Form, Table} from "react-bootstrap";
 import {useState} from "react";
 import { TbTrash } from "react-icons/tb";
 
-
 const SpeciesSelect = ({onSuccess, onFailure, updateSpecies}) => {
-    const validAttrs = ["name", "description", "weight", "height", "type"];
-    const validClauses = ["AND", "OR"];
+    const attributes = ["name", "description", "weight", "height", "type"];
+    const clauses = ["AND", "OR"];
     const attrOps = {
-        name: ["like"],
-        description: ["like"],
+        name: ["=", "<>", "like"],
+        description: ["=", "<>", "like"],
         weight: ["=", "<>", "<", ">", "<=", ">="],
         height: ["=", "<>", "<", ">", "<=", ">="],
-        type: ["like"],
+        type: ["=", "<>", "like"],
     };
     const attrPlaceholders = {
         name: "Text",
@@ -20,8 +19,7 @@ const SpeciesSelect = ({onSuccess, onFailure, updateSpecies}) => {
         height: "Number",
         type: "Text",
     };
-    const [conditions, setConditions] = useState([{ index: 0, attr: "", op: "", val: "" }]);
-    const [clauses, setClauses] = useState([{ index: 0, val: ""}]);
+    const [conditions, setConditions] = useState([{ index: 0, attr: "", op: "", val: "", clause: "" }]);
 
     const handleCondition = (index, field, value) => {
         setConditions(prev =>
@@ -31,28 +29,17 @@ const SpeciesSelect = ({onSuccess, onFailure, updateSpecies}) => {
         );
     }
 
-    const handleClause = (index, field, value) => {
-        setClauses(prev =>
-            prev.map(cond =>
-                cond.index === index ? { ...cond, [field]: value } : cond
-            )
-        );
-    }
-
     const handleAdd = () => {
         const hiIndex = Math.max(...conditions.map(cond => cond.index)) + 1;
-        setConditions(prev => [...prev, { index: hiIndex, attr: "", op: "", val: "" }]);
-        setClauses(prev => [...prev, { index: hiIndex, val: "" }]);
+        setConditions(prev => [...prev, { index: hiIndex, attr: "", op: "", val: "", clause: "" }]);
     }
 
     const handleDelete = (index) => {
         setConditions(prev => prev.filter(cond => cond.index !== index));
-        setClauses(prev => prev.filter(clause => clause.index !== index));
     }
 
     const handleReset = () => {
-        setConditions([{ index: 0, attr: "", op: "", val: "" }]);
-        setClauses([{ index: 0, val: ""}]);
+        setConditions([{ index: 0, attr: "", op: "", val: "", clause: "" }]);
     }
 
     const handleSubmit = async (e) => {
@@ -62,14 +49,13 @@ const SpeciesSelect = ({onSuccess, onFailure, updateSpecies}) => {
             const response = await fetch(`http://localhost:5001/species`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({conditions: conditions, clauses: clauses})
+                body: JSON.stringify({conditions})
             });
 
             if (response.ok) {
                 const data = await response.json();
                 onSuccess();
                 updateSpecies(data);
-
             } else {
                 const errorData = await response.json();
                 onFailure(errorData.error);
@@ -93,7 +79,7 @@ const SpeciesSelect = ({onSuccess, onFailure, updateSpecies}) => {
                 </thead>
                 <tbody>
                 {conditions.map((cond) => {
-                    const availableOps = attrOps[cond.attr] || [];
+                    const validOps = attrOps[cond.attr] || [];
                     const placeholder = attrPlaceholders[cond.attr] || "";
                     return (
                         <tr className>
@@ -104,10 +90,8 @@ const SpeciesSelect = ({onSuccess, onFailure, updateSpecies}) => {
                                         handleCondition(cond.index, "attr", e.target.value)}
                                 >
                                     <option value="">Select an attribute</option>
-                                    {validAttrs.map((attr) =>
-                                        <option value={attr}>
-                                            {attr}
-                                        </option>)}
+                                    {attributes.map((attr) =>
+                                        <option value={attr}>{attr}</option>)}
                                 </Form.Select>
                             </td>
                             <td className="align-content-center">
@@ -117,10 +101,8 @@ const SpeciesSelect = ({onSuccess, onFailure, updateSpecies}) => {
                                         handleCondition(cond.index, "op", e.target.value)}
                                 >
                                     <option value="">Select an operator</option>
-                                    {availableOps.map((op) =>
-                                        <option value={op}>
-                                            {op}
-                                        </option>)}
+                                    {validOps.map((op) =>
+                                        <option value={op}>{op}</option>)}
                                 </Form.Select>
                             </td>
                             <td className="align-content-center">
@@ -135,19 +117,18 @@ const SpeciesSelect = ({onSuccess, onFailure, updateSpecies}) => {
                             <td className="align-content-center">
                                 <Form.Select
                                     onChange={(e) =>
-                                        handleClause(cond.index, "val", e.target.value)}
+                                        handleCondition(cond.index, "clause", e.target.value)}
                                 >
                                     <option value="">Select a clause</option>
-                                    {validClauses.map((clause) =>
-                                        <option value={clause}>
-                                            {clause}
-                                        </option>)}
+                                    {clauses.map((clause) =>
+                                        <option value={clause}> {clause} </option>)}
                                 </Form.Select>
                             </td>
                             <td className="align-content-center">
                                 <Button
                                     disabled={conditions.length === 1}
-                                    className="custom-icon-btn" variant="danger"
+                                    className="custom-icon-btn"
+                                    variant="danger"
                                     onClick={() => (handleDelete(cond.index))}>
                                     <TbTrash />
                                 </Button>

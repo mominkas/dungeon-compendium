@@ -8,7 +8,7 @@ import ClassLevelFeatures from "../components/ClassLevelFeatures.tsx";
 const ClassPage = () => {
     const [classes, setClasses] = useState([]);
     const [showAlert, setShowAlert] = useState(false);
-    const [alertVariant, setAlertVariant] = useState("secondary");
+    const [alertVariant, setAlertVariant] = useState("");
     const [alertMessage, setAlertMessage] = useState("");
     const [triggerReload, setTriggerReload] = useState(true);
 
@@ -41,7 +41,7 @@ const ClassPage = () => {
             setClasses(data);
             setTriggerReload(false);
         } catch (err) {
-            console.error("Error fetching classes:", err);
+            console.error("Error fetching classes: ", err);
         }
     }
 

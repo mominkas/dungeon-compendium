@@ -4,6 +4,7 @@ import {FK_VIOLATION_CODE, PK_DUPLICATE_CODE} from "./index.js";
 
 const router = express.Router();
 
+// route setups: https://www.youtube.com/watch?v=ldYcgPKEZC8&t=930s&ab_channel=freeCodeCamp.org
 router.get('/', async (req, res) => {
     try {
         const pool = await getPool();

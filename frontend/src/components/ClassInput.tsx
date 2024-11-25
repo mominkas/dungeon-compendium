@@ -5,7 +5,7 @@ const ClassInput = ({ onSuccess, onFailure, updateClasses }) => {
     const [form, setForm] = useState({
         name: "",
         level: ""
-    });
+    }); // form setup: https://www.youtube.com/watch?v=-yIsQPp31L0&t=479s&ab_channel=ByteGrad
 
     const handleChange = (e) => {
         setForm({

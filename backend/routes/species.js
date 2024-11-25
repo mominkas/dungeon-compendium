@@ -11,26 +11,24 @@ router.get('/', async (req, res) => {
 // Selection: user can search for tuples using AND/OR clauses and combination of attributes
 router.post('/', async (req, res) => {
     try {
-        const {conditions, clauses} = req.body;
+        const {conditions} = req.body;
 
-        if (!Array.isArray(conditions) || conditions.length === 0 || !Array.isArray(clauses) || clauses.length === 0) {
-            return res.status(400).json({message: "Conditions and clauses should be non-empty arrays"});
+        if (!Array.isArray(conditions) || conditions.length === 0) {
+            return res.status(400).json({message: "Conditions should be a non-empty array"});
         }
 
-        const errors = validateErrors({conditions, clauses});
+        const errors = validateErrors(conditions);
         if (errors.length > 0) {
             return res.status(400).json({error: errors.join(". ")});
         }
 
         const parts = [];
-        conditions.forEach((cond, index) => {
-            const {attr, op, val} = cond;
+        conditions.forEach((cond) => {
+            const {attr, op, val, clause} = cond;
 
             (cond.attr === "weight" || cond.attr === "height")
-                ? parts.push(`${attr} ${op} ${val}`)
-                : parts.push(`${attr} ${op} '${val}'`);
-            parts.push(clauses[index].val);
-            index++;
+                ? parts.push(`${attr} ${op} ${val} ${clause}`)
+                : parts.push(`${attr} ${op} '${val}' ${clause}`);
         });
 
         const pool = await getPool();
@@ -43,10 +41,12 @@ router.post('/', async (req, res) => {
     }
 });
 
-const validateErrors = ({conditions, clauses}) => {
+const validateErrors = (conditions) => {
     const errors = [];
 
-    for (const cond of conditions) {
+    for (let i = 0; i < conditions.length; i++) {
+        const cond = conditions[i];
+
         if (!cond.attr || cond.attr.trim() === "") {
             errors.push("Missing attribute");
         }
@@ -58,19 +58,12 @@ const validateErrors = ({conditions, clauses}) => {
                 errors.push(`${cond.attr} must be a number`);
             }
         }
-    }
-
-    if (clauses.length !== conditions.length) {
-        errors.push("Incorrect number of clauses");
-    }
-    for (let i = 0; i < clauses.length; i++) {
-       const clause = clauses[i];
-        if (i === clauses.length - 1) {
-            if (clause.val) {
+        if (i === conditions.length - 1) {
+            if (cond.clause) {
                 errors.push("Cannot end with a clause")
             }
         } else {
-            if (!clause.val || clause.val.trim() === "") {
+            if (!cond.clause || cond.clause.trim() === "") {
                 errors.push("Missing clause");
             }
         }

@@ -39,7 +39,7 @@ const ClassLevelFeatures = ({setTriggerReload}) => {
     }
 
     const onDeleteFailure = (level, err) => {
-        const failureMessage = `Failed to delete Level ${level} Error: ${err}`;
+        const failureMessage = `Failed to delete Level ${level}. Error: ${err}`;
         setAlertMessage(failureMessage);
         setAlertVariant("danger");
         alertTimeout();
@@ -78,7 +78,7 @@ const ClassLevelFeatures = ({setTriggerReload}) => {
 
             setDesc(data);
         } catch (error) {
-            console.error("Error fetching class level features:", error);
+            console.error("Error fetching class level features: ", error);
         }
     }
 
