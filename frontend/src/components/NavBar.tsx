@@ -23,6 +23,9 @@ function NavBar() {
         <Link to="/">Home</Link>
       </NavItem>
       <NavItem className="list-group-item">
+        <Link to="/campaigns">Campaigns</Link>
+      </NavItem>
+      <NavItem className="list-group-item">
         <Link to="/classes">Classes</Link>
       </NavItem>
       <NavItem className="list-group-item">

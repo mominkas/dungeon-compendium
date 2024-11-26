@@ -5,11 +5,15 @@ import SpeciesPage from "./pages/SpeciesPage.tsx";
 import PrivateRoute from "./components/PrivateRoute.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import NavBar from "./components/NavBar.tsx";
+import CampaignPage from "./pages/CampaignPage.tsx";
+import CampaignDetailsPage from "./pages/CampaignDetailsPage.tsx";
 
 function App() {
   return (
     <>
-      <Router> {/* router setup: https://youtu.be/U7oPfhHAzLc?si=fnu5_Y85XM_0MJ_3 */}
+      <Router>
+        {" "}
+        {/* router setup: https://youtu.be/U7oPfhHAzLc?si=fnu5_Y85XM_0MJ_3 */}
         <NavBar />
         <Routes>
           <Route path="/login" element={<LoginPage />} />
@@ -29,6 +33,22 @@ function App() {
             element={
               <PrivateRoute>
                 <ClassPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/campaigns"
+            element={
+              <PrivateRoute>
+                <CampaignPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="campaigns/campaign-details/*"
+            element={
+              <PrivateRoute>
+                <CampaignDetailsPage />
               </PrivateRoute>
             }
           />
