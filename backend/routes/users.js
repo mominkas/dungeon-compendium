@@ -72,7 +72,7 @@ router.get('/login', async (req, res) => {
             return res.status(401).json({error: "Invalid Creds"})
         }
     
-        // compare stroed hashed pw with provided pw
+        // compare stored hashed pw with provided pw
         const checkPW = bcrypt.compare(password, user.password)
     
         if (!checkPW) {
