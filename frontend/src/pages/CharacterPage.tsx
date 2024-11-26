@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {Button, Modal, Stack, Table} from "react-bootstrap";
 import {Link} from "react-router-dom";
+import CharacterInputForm from "../components/CharacterInputForm.tsx";
 
 
 export interface Character {
@@ -161,6 +162,7 @@ const CharacterPage = () => {
                     <Modal.Body>
                         <Stack direction={"vertical"}
                                gap={2}>
+                            <CharacterInputForm/>
                         </Stack>
                     </Modal.Body>
                     <Modal.Footer>
