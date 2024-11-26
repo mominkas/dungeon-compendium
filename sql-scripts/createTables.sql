@@ -1,3 +1,4 @@
+-- postgres drop tables loop: https://www.geeksforgeeks.org/how-to-drop-all-tables-from-postgresql-1/
 DO $$
     DECLARE
         r RECORD;
@@ -36,7 +37,7 @@ CREATE TABLE Species (
     name VARCHAR(100) PRIMARY KEY,
     description VARCHAR(1000) NULL,
     weight INTEGER NOT NULL,
-    height VARCHAR(100) NOT NULL,
+    height INTEGER NOT NULL,
     type VARCHAR(100) NOT NULL
 );
 

@@ -14,72 +14,27 @@ router.get('/', async (req, res) => {
     }
 });
 
-// INSERT
+// Projection: user can choose any number of attributes to view
 router.post('/', async (req, res) => {
     try {
-        const {name, description, primary_ability, weapon_proficiency, armor_proficiency, hit_die, saving_throw_proficiency} =
-            req.body;
+        const {attributes} = req.body;
+
+        if (!Array.isArray(attributes) || attributes.length === 0) {
+            return res.status(200).json({message: "Attributes should be non-empty array"});
+        }
+
+        const validAttrs = ["name", "description", "primary_ability", "weapon_proficiency", "armor_proficiency", "hit_die", "saving_throw_proficiency"];
+        const selectedAttrs = attributes.filter(attr => validAttrs.includes(attr));
+
+        if (selectedAttrs.length === 0) {
+            return res.status(400).json({error: "No valid attributes selected"});
+        }
+
+        const query = `SELECT ${attributes.join(", ")} FROM class_description`;
         const pool = await getPool();
+        const selectClassDesc = await pool.query(query);
 
-        const insertClassDescription = await pool.query(
-            "INSERT INTO class_description VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
-            [
-                name,
-                description,
-                primary_ability,
-                weapon_proficiency,
-                armor_proficiency,
-                hit_die,
-                saving_throw_proficiency
-            ]
-        );
-
-        res.status(200).json(insertClassDescription.rows[0]);
-    } catch (err) {
-        res.status(400).json({error: err.message});
-    }
-});
-
-// UPDATE with any number of custom values
-router.put('/:name', async (req, res) => {
-    try {
-        const {name} = req.params;
-        const {description, primary_ability, weapon_proficiency, armor_proficiency, hit_die, saving_throw_proficiency} = req.body;
-        const query = `
-            UPDATE class_description
-            SET
-                description = COALESCE($2, description),
-                primary_ability = COALESCE($3, primary_ability),
-                weapon_proficiency = COALESCE($4, weapon_proficiency),
-                armor_proficiency = COALESCE($5, armor_proficiency),
-                hit_die = COALESCE($6, hit_die),
-                saving_throw_proficiency = COALESCE($7, saving_throw_proficiency)
-            WHERE name = $1
-            RETURNING *;
-        `;
-
-        const pool = await getPool();
-        const updateDesc = await pool.query(query,
-            [name, description, primary_ability, weapon_proficiency, armor_proficiency, hit_die, saving_throw_proficiency]
-        );
-        res.status(200).json(updateDesc.rows[0]);
-    } catch (err) {
-        res.status(400).json({error: err.message});
-    }
-});
-
-// DELETE will cascade
-router.delete('/:name', async (req, res) => {
-    try {
-        const {name} = req.params;
-        const pool = await getPool();
-
-        const deleteClassDesc = await pool.query(
-            "DELETE FROM class_description WHERE name = $1 RETURNING *",
-            [name]
-        );
-
-        res.status(200).json(deleteClassDesc.rows[0]);
+        res.status(200).json(selectClassDesc.rows);
     } catch (err) {
         res.status(400).json({error: err.message});
     }

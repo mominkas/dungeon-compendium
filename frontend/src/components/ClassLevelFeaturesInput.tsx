@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import {Button, Form, FormControl} from "react-bootstrap";
+import { MdAdd } from "react-icons/md";
 
 const ClassLevelFeaturesInput = ({ onSuccess, onFailure, updateClassLevelFeatures }) => {
     const [form, setForm] = useState({
@@ -46,7 +47,7 @@ const ClassLevelFeaturesInput = ({ onSuccess, onFailure, updateClassLevelFeature
     const canSubmit = form.level && form.num_hit_die && form.advantage_effect && form.modifier_effect;
 
     return (
-        <div className="d-flex justify-content-center align-content-center">
+        <div className="d-flex justify-content-center align-items-center">
             <h6 className="custom-h6-label">Add a level</h6>
             <Form
                 className="d-flex justify-content-center"
@@ -81,10 +82,10 @@ const ClassLevelFeaturesInput = ({ onSuccess, onFailure, updateClassLevelFeature
                     placeholder="Modifier effect"
                 />
                 <Button
-                    className="btn btn-success custom-add-btn"
+                    className="btn btn-success"
                     type="submit"
                     disabled={!canSubmit}>
-                    Add
+                    <MdAdd />
                 </Button>
             </Form>
         </div>

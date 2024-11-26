@@ -1,12 +1,13 @@
 import {useEffect, useState} from "react";
 import {Alert, Button, Modal, Table} from "react-bootstrap";
 import ClassLevelFeaturesInput from "./ClassLevelFeaturesInput.tsx";
+import {TbTrash} from "react-icons/tb";
 
 const ClassLevelFeatures = ({setTriggerReload}) => {
     const [desc, setDesc] = useState([]);
     const [level, setLevel] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
-    const [alertVariant, setAlertVariant] = useState("secondary");
+    const [alertVariant, setAlertVariant] = useState("");
     const [alertMessage, setAlertMessage] = useState("");
     const [showModal, setShowModal] = useState(false);
 
@@ -18,28 +19,28 @@ const ClassLevelFeatures = ({setTriggerReload}) => {
     }
 
     const onInputSuccess = (level) => {
-        const successMessage = `SUCCESS! Added Level ${level}.`;
+        const successMessage = `Added Level ${level}.`;
         setAlertMessage(successMessage);
         setAlertVariant("success");
         alertTimeout();
     }
 
     const onInputFailure = (level, err) => {
-        const failureMessage = `WARNING! Failed to add Level ${level}. Error: ${err}.`;
+        const failureMessage = `Failed to add Level ${level}. Error: ${err}.`;
         setAlertMessage(failureMessage);
         setAlertVariant("danger");
         alertTimeout();
     }
 
     const onDeleteSuccess = (level) => {
-        const successMessage = `SUCCESS! Deleted Level ${level}`;
+        const successMessage = `Deleted Level ${level}`;
         setAlertMessage(successMessage);
         setAlertVariant("success");
         alertTimeout();
     }
 
     const onDeleteFailure = (level, err) => {
-        const failureMessage = `WARNING! Failed to delete Level ${level} Error: ${err}`;
+        const failureMessage = `Failed to delete Level ${level}. Error: ${err}`;
         setAlertMessage(failureMessage);
         setAlertVariant("danger");
         alertTimeout();
@@ -78,7 +79,7 @@ const ClassLevelFeatures = ({setTriggerReload}) => {
 
             setDesc(data);
         } catch (error) {
-            console.error("Error fetching class level features:", error);
+            console.error("Error fetching class level features: ", error);
         }
     }
 
@@ -93,11 +94,11 @@ const ClassLevelFeatures = ({setTriggerReload}) => {
                 onFailure={onInputFailure}
                 updateClassLevelFeatures={fetchData}
             />
-            <Table className="table mt-5 text-center">
+            <Table className="mt-5">
                 <thead>
                 <tr>
                     <th>Level</th>
-                    <th>Num Hit Die</th>
+                    <th>Number of Hit Die</th>
                     <th>Advantage Effect</th>
                     <th>Modifier Effect</th>
                     <th>Delete</th>
@@ -106,7 +107,7 @@ const ClassLevelFeatures = ({setTriggerReload}) => {
                 <tbody>
                     {desc.length > 0 ? (
                         desc.map((item) => (
-                                <tr key={item.level}>
+                                <tr key={item.level} className="align-self-center">
                                     <td>{item.level}</td>
                                     <td>{item.num_hit_die}</td>
                                     <td>{item.advantage_effect}</td>
@@ -115,7 +116,7 @@ const ClassLevelFeatures = ({setTriggerReload}) => {
                                         <button
                                             className='btn btn-danger'
                                             onClick={() => handleDelete(item.level)}>
-                                            Delete
+                                            <TbTrash />
                                         </button>
                                     </td>
                                 </tr>
@@ -136,7 +137,10 @@ const ClassLevelFeatures = ({setTriggerReload}) => {
                 <Modal.Header>
                     <Modal.Title>Delete Class Level Feature</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Are you sure you want to delete features for Level {level}?</Modal.Body>
+                <Modal.Body>
+                    Are you sure you want to delete features for Level {level}?
+                    Deleting features here will delete Classes and Characters associated with Level {level}.
+                </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseModal}>
                         No

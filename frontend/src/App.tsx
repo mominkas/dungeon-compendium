@@ -9,7 +9,7 @@ import NavBar from "./components/NavBar.tsx";
 function App() {
   return (
     <>
-      <Router>
+      <Router> {/* router setup: https://youtu.be/U7oPfhHAzLc?si=fnu5_Y85XM_0MJ_3 */}
         <NavBar />
         <Routes>
           <Route path="/login" element={<LoginPage />} />

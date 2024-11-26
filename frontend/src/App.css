@@ -51,12 +51,22 @@
   border: none;
 }
 
-.custom-add-btn {
-  height: calc(1.5em + .75rem + 2px);
+.form-check {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+}
+
+.custom-icon-btn {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
 }
 
 .custom-h6-label {
-    margin: 0 8px 0 0;
+    margin: 0 16px 0 0;
     padding: 8px 0 8px 0;
-    text-wrap: nowrap;
+    text-wrap: wrap;
 }

@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 const { Pool } = pkg;
 dotenv.config();
 
-// we want to create the db if it doesnt exist. Streamlines process, no need for manual creation
+// we want to create the db if it doesn't exist. Streamlines process, no need for manual creation
 const createDb = async () => {
     // connect to default first
     const defaultPool = new Pool({

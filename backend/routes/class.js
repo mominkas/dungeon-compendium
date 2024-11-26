@@ -4,6 +4,7 @@ import {FK_VIOLATION_CODE, PK_DUPLICATE_CODE} from "./index.js";
 
 const router = express.Router();
 
+// route setups: https://www.youtube.com/watch?v=ldYcgPKEZC8&t=930s&ab_channel=freeCodeCamp.org
 router.get('/', async (req, res) => {
     try {
         const pool = await getPool();
@@ -46,23 +47,6 @@ router.post('/', async (req, res) => {
         } else {
             res.status(400).json({error: err.message});
         }
-    }
-});
-
-// DELETE
-router.delete('/:name/:level', async (req, res) => {
-    try {
-        const {name, level} = req.params;
-        const pool = await getPool();
-
-        const deleteClass = await pool.query(
-            "DELETE FROM class WHERE name = $1 AND level = $2 RETURNING *",
-            [name, level]
-        );
-
-        res.status(200).json(deleteClass.rows[0]);
-    } catch (err) {
-        res.status(400).json({error: err.message});
     }
 });
 
