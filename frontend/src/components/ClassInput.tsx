@@ -1,18 +1,19 @@
 import {useState} from 'react';
 import {Button, Form, FormControl} from "react-bootstrap";
+import { MdAdd } from "react-icons/md";
 
 const ClassInput = ({ onSuccess, onFailure, updateClasses }) => {
     const [form, setForm] = useState({
         name: "",
         level: ""
-    })
+    }); // form setup: https://www.youtube.com/watch?v=-yIsQPp31L0&t=479s&ab_channel=ByteGrad
 
     const handleChange = (e) => {
         setForm({
           ...form,
           [e.target.name]: e.target.value
         });
-    }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -42,7 +43,7 @@ const ClassInput = ({ onSuccess, onFailure, updateClasses }) => {
     const canSubmit = form.name && form.level;
 
     return (
-        <div className="d-flex justify-content-center align-content-center">
+        <div className="d-flex justify-content-center align-items-center">
             <h6 className="custom-h6-label">Add a class</h6>
             <Form
                 className="d-flex justify-content-center"
@@ -63,10 +64,10 @@ const ClassInput = ({ onSuccess, onFailure, updateClasses }) => {
                     placeholder="Level"
                 />
                 <Button
-                    className="btn btn-success custom-add-btn"
+                    className="btn btn-success"
                     type="submit"
                     disabled={!canSubmit}>
-                    Add
+                    <MdAdd />
                 </Button>
             </Form>
         </div>

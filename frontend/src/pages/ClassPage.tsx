@@ -8,7 +8,7 @@ import ClassLevelFeatures from "../components/ClassLevelFeatures.tsx";
 const ClassPage = () => {
     const [classes, setClasses] = useState([]);
     const [showAlert, setShowAlert] = useState(false);
-    const [alertVariant, setAlertVariant] = useState("secondary");
+    const [alertVariant, setAlertVariant] = useState("");
     const [alertMessage, setAlertMessage] = useState("");
     const [triggerReload, setTriggerReload] = useState(true);
 
@@ -20,44 +20,17 @@ const ClassPage = () => {
     }
 
     const onInputSuccess = (name, level) => {
-        const successMessage = `SUCCESS! Added ${name} ${level}.`;
+        const successMessage = `Added ${name} ${level}.`;
         setAlertMessage(successMessage);
         setAlertVariant("success");
         alertTimeout();
     }
 
     const onInputFailure = (name, level, err) => {
-        const failureMessage = `WARNING! Failed to add ${name} ${level}. Error: ${err}.`;
+        const failureMessage = `Failed to add ${name} ${level}. Error: ${err}.`;
         setAlertMessage(failureMessage);
         setAlertVariant("danger");
         alertTimeout();
-    }
-
-    const onDeleteSuccess = (name, level) => {
-        const successMessage = `SUCCESS! Deleted ${name} ${level}.`;
-        setAlertMessage(successMessage);
-        setAlertVariant("success");
-        alertTimeout();
-    }
-
-    const onDeleteFailure = (name, level, err) => {
-        const failureMessage = `WARNING! Failed to delete ${name} ${level}. Error: ${err}.`;
-        setAlertMessage(failureMessage);
-        setAlertVariant("danger");
-        alertTimeout();
-    }
-
-    const deleteClass = async (name, level) => {
-        try {
-            await fetch(`http://localhost:5001/class/${name}/${level}` , {
-               method: "DELETE"
-            });
-            setClasses(classes.filter((item) => item.name !== name || item.level !== level));
-            onDeleteSuccess(name, level);
-        } catch (err) {
-            console.error("Error deleting class: ", err);
-            onDeleteFailure(name, level, err);
-        }
     }
 
     const fetchData = async () => {
@@ -67,8 +40,8 @@ const ClassPage = () => {
 
             setClasses(data);
             setTriggerReload(false);
-        } catch (error) {
-            console.error("Error fetching classes:", error);
+        } catch (err) {
+            console.error("Error fetching classes: ", err);
         }
     }
 
@@ -100,12 +73,11 @@ const ClassPage = () => {
                     onFailure={onInputFailure}
                     updateClasses={fetchData}
                 />
-                <Table className="table mt-5 text-center">
+                <Table className="mt-5">
                     <thead>
                     <tr>
                         <th>Name</th>
                         <th>Level</th>
-                        <th>Delete</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -114,13 +86,6 @@ const ClassPage = () => {
                             <tr key={[item.name, item.level]}>
                                 <td>{item.name}</td>
                                 <td>{item.level}</td>
-                                <td>
-                                    <button
-                                        className='btn btn-danger'
-                                        onClick={() => deleteClass(item.name, item.level)}>
-                                        Delete
-                                    </button>
-                                </td>
                             </tr>
                         ))
                     ) : (

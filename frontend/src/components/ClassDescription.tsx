@@ -1,49 +1,44 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Table} from "react-bootstrap";
+import ClassDescProject from "./ClassDescProject.tsx";
 
 const ClassDescription = () => {
     const [desc, setDesc] = useState([]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch('http://localhost:5001/class_description');
-                const data = await response.json();
-
-                setDesc(data);
-            } catch (error) {
-                console.error("Error fetching class descriptions:", error);
-            }
-        }
-        fetchData();
-    }, []);
+    const classDescAttrs = [
+        { id: "name", name: "Name" },
+        { id: "description", name: "Description" },
+        { id: "primary_ability", name: "Primary Ability" },
+        { id: "weapon_proficiency", name: "Weapon Proficiency" },
+        { id: "armor_proficiency", name: "Armor Proficiency" },
+        { id: "hit_die", name: "Hit Die" },
+        { id: "saving_throw_proficiency", name: "Saving Throw Proficiency" }
+    ];
 
     return (
         <>
-            <Table className="table mt-5 text-center">
+            <ClassDescProject updateDesc={setDesc} />
+            <Table className="mt-5">
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Primary Ability</th>
-                    <th>Weapon Proficiency</th>
-                    <th>Armor Proficiency</th>
-                    <th>Hit Die</th>
-                    <th>Saving Throw Proficiency</th>
+                    {classDescAttrs.map((attr) => (
+                        <th key={attr.id}>{attr.name}</th>
+                    ))}
                 </tr>
                 </thead>
                 <tbody>
-                {desc.map((item) => (
-                    <tr key={item.name}>
-                        <td>{item.name}</td>
-                        <td>{item.description}</td>
-                        <td>{item.primary_ability}</td>
-                        <td>{item.weapon_proficiency}</td>
-                        <td>{item.armor_proficiency}</td>
-                        <td>{item.hit_die}</td>
-                        <td>{item.saving_throw_proficiency}</td>
-                    </tr>))
-                }
+                {desc.length > 0 ? (
+                    desc.map((item) => (
+                        <tr key={item.name}>
+                            {classDescAttrs.map((attr) =>
+                                <td key={attr.id}>{item[attr.id] || ""}</td>
+                            )}
+                        </tr>
+                    ))
+                ) : (
+                    <tr>
+                        <td colSpan={classDescAttrs.length}>No columns selected. Please select columns to view!</td>
+                    </tr>
+                )}
                 </tbody>
             </Table>
         </>

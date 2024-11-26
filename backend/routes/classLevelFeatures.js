@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
 
         const errors = validateErrors({level, num_hit_die, advantage_effect, modifier_effect});
         if (errors.length > 0) {
-            return res.status(400).json({error: errors.join(" ")});
+            return res.status(400).json({error: errors.join(". ")});
         }
 
         const pool = await getPool();
@@ -38,29 +38,6 @@ router.post('/', async (req, res) => {
         } else {
             res.status(400).json({error: err.message});
         }
-    }
-});
-
-// UPDATE with any number of custom values
-router.put('/:level', async (req, res) => {
-    try {
-        const {level} = req.params;
-        const {num_hit_die, advantage_effect, modifier_effect} = req.body;
-        const query = `
-            UPDATE class_level_features
-            SET
-                num_hit_die = COALESCE($2, num_hit_die),
-                advantage_effect = COALESCE($3, advantage_effect),
-                modifier_effect = COALESCE($4, modifier_effect)
-            WHERE level = $1
-            RETURNING *;
-        `;
-
-        const pool = await getPool();
-        const updateFeatures = await pool.query(query, [level, num_hit_die, advantage_effect, modifier_effect]);
-        res.status(200).json(updateFeatures.rows[0]);
-    } catch (err) {
-        res.status(400).json({error: err.message});
     }
 });
 
@@ -85,9 +62,9 @@ const validateErrors = (features) => {
     const errors = [];
 
     for (const [key, value] of Object.entries(features)) {
-        if (!value || value.trim() === "") {
+        if (!value) {
             errors.push(`No ${key} provided`);
-        } else if (isNaN(Number(value))) {
+        } else if (isNaN(Number(value)) || value.trim() === "") {
             errors.push(`${key} must be a valid number`);
         }
     }
