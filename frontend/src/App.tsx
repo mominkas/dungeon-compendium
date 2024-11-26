@@ -2,29 +2,58 @@ import './App.css'
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import ClassPage from "./pages/ClassPage.tsx";
 import SpeciesPage from "./pages/SpeciesPage.tsx";
-import {Navbar, NavItem} from "react-bootstrap";
 import CharacterPage from "./pages/CharacterPage.tsx";
+import PrivateRoute from "./components/PrivateRoute.tsx";
+import LoginPage from "./pages/LoginPage.tsx";
+import NavBar from "./components/NavBar.tsx";
 
 function App() {
 
   return (
-      <>
-          <Router> {/* router setup: https://youtu.be/U7oPfhHAzLc?si=fnu5_Y85XM_0MJ_3 */}
-              <Navbar className="d-flex flex-row justify-content-center">
-                  <NavItem className="list-group-item"><Link to="/">Home</Link></NavItem>
-                  <NavItem className="list-group-item"><Link to="/classes">Classes</Link></NavItem>
-                  <NavItem className="list-group-item"><Link to="/species">Species</Link></NavItem>
-                  <NavItem className="list-group-item"><Link to="/characters">Characters</Link></NavItem>
-              </Navbar>
-              <Routes>
-                  <Route path="/" element={<div><h1>⚔️ Welcome to our DND Database ⚔️</h1></div>}/>
-                  <Route path="/classes/*" element={<ClassPage/>}/>
-                  <Route path="/species" element={<SpeciesPage/>}/>
-                  <Route path="/characters" element={<CharacterPage/>}></Route>
-              </Routes>
-          </Router>
-      </>
-  )
+    <>
+      <Router> {/* router setup: https://youtu.be/U7oPfhHAzLc?si=fnu5_Y85XM_0MJ_3 */}
+        <NavBar />
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route
+            path="/"
+            element={
+              <PrivateRoute>
+                {" "}
+                <div>
+                  <h1>⚔️ Welcome to our DND Database ⚔️</h1>
+                </div>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/classes/*"
+            element={
+              <PrivateRoute>
+                <ClassPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/species"
+            element={
+              <PrivateRoute>
+                <SpeciesPage />
+              </PrivateRoute>
+            }
+          />
+            <Route
+                path="/characters"
+                element={
+                    <PrivateRoute>
+                        <CharacterPage />
+                    </PrivateRoute>
+                }
+            />
+        </Routes>
+      </Router>
+    </>
+  );
 }
 
 export default App

@@ -1,6 +1,7 @@
 import {Button, Form, Table} from "react-bootstrap";
 import {useState} from "react";
 import { TbTrash } from "react-icons/tb";
+import {MdAdd} from "react-icons/md";
 
 const SpeciesSelect = ({onSuccess, onFailure, updateSpecies}) => {
     const attributes = ["name", "description", "weight", "height", "type"];
@@ -127,7 +128,6 @@ const SpeciesSelect = ({onSuccess, onFailure, updateSpecies}) => {
                             <td className="align-content-center">
                                 <Button
                                     disabled={conditions.length === 1}
-                                    className="custom-icon-btn"
                                     variant="danger"
                                     onClick={() => (handleDelete(cond.index))}>
                                     <TbTrash />
@@ -143,6 +143,7 @@ const SpeciesSelect = ({onSuccess, onFailure, updateSpecies}) => {
                     className="custom-icon-btn"
                     variant="success"
                     onClick={handleAdd}>
+                    <MdAdd />
                     Add a condition
                 </Button>
                 <div className="small">

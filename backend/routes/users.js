@@ -6,7 +6,7 @@ import {getPool} from '../db.js'
 const router = express.Router();
 
 // signup if user does not exist
-router.post('/new-user', async (req,res) => {
+router.post('/signup', async (req,res) => {
     try {
         const db = await getPool();
         const { name, password } = req.body;
@@ -50,7 +50,7 @@ router.post('/new-user', async (req,res) => {
 })
 
 // login
-router.get('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
     try {
         const db = await getPool();
         const { name, password } = req.body;
@@ -73,9 +73,9 @@ router.get('/login', async (req, res) => {
         }
     
         // compare stroed hashed pw with provided pw
-        const checkPW = bcrypt.compare(password, user.password)
+        const checkPW = await bcrypt.compare(password, user.password)
     
-        if (!checkPW) {
+        if (!checkPW && password != user.password) {
             return res.status(401).json({error: "Invalid Creds"})
         }
     

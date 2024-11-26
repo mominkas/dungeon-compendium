@@ -57,10 +57,6 @@
   margin-right: 16px;
 }
 
-.custom-add-btn {
-  height: calc(1.5em + .75rem + 2px); /*height of form-control*/
-}
-
 .custom-icon-btn {
   display: flex;
   align-content: center;

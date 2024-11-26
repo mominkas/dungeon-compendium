@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import {Button, Form, FormControl} from "react-bootstrap";
+import { MdAdd } from "react-icons/md";
 
 const ClassInput = ({ onSuccess, onFailure, updateClasses }) => {
     const [form, setForm] = useState({
@@ -63,10 +64,10 @@ const ClassInput = ({ onSuccess, onFailure, updateClasses }) => {
                     placeholder="Level"
                 />
                 <Button
-                    className="btn btn-success custom-add-btn"
+                    className="btn btn-success"
                     type="submit"
                     disabled={!canSubmit}>
-                    Add
+                    <MdAdd />
                 </Button>
             </Form>
         </div>
