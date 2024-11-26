@@ -26,7 +26,7 @@ const createDb = async () => {
         }
 
     } catch (error) {
-        console.log("Error creating db " + error)
+        console.error("Error creating db " + error)
         
     } finally {
         await defaultPool.end()

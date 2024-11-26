@@ -15,7 +15,7 @@ const initServer = async () => {
         console.log('successfully connected to database :)')
         app.listen(5001, () => console.log("listening on port 5001"));
     } catch (error) {
-        console.log('Error connecting to db ' + error);
+        console.error('Error connecting to db ' + error);
     }
 }
 
@@ -25,7 +25,7 @@ const terminateDbConnection = async () => {
     try {
         await terminateSession();
     } catch (error) {
-        console.log('error disconnecting from the db ' + error);
+        console.error('error disconnecting from the db ' + error);
     } finally {
         process.exit(0)
     }
