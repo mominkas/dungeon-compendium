@@ -16,6 +16,30 @@ router.get('/', async (req, res) => {
     }
 });
 
+// used by characters to get valid options for upload
+router.get('/options', async (req, res) => {
+    try {
+        const pool = await getPool();
+        const query = `SELECT name, level FROM class ORDER BY name, level`;
+        const result = await pool.query(query);
+        res.status(200).json(result.rows);
+    } catch (err) {
+        res.status(400).json({error: err.message});
+    }
+});
+
+// used by characters to get HP
+router.get('/options', async (req, res) => {
+    try {
+        const pool = await getPool();
+        const query = `SELECT name, level FROM class ORDER BY name, level`;
+        const result = await pool.query(query);
+        res.status(200).json(result.rows);
+    } catch (err) {
+        res.status(400).json({error: err.message});
+    }
+});
+
 // INSERT
 router.post('/', async (req, res) => {
     try {

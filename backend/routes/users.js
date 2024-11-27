@@ -5,6 +5,30 @@ import {getPool} from '../db.js'
 
 const router = express.Router();
 
+router.get('/allClassesPlayers', async (req,res) => {
+    try {
+        const pool = await getPool();
+        const query = `
+            SELECT p.name
+            FROM Participant p
+            WHERE NOT EXISTS (
+                (   SELECT c.name
+                    FROM class c)
+                    EXCEPT (SELECT c2.name
+                            FROM character char
+                            JOIN class c2 ON char.class_name = c2.name
+                            WHERE char.participant_id = p.participant_id)
+            )
+        `
+
+        const result = await pool.query(query);
+        res.status(200).json(result.rows);
+
+    } catch (err) {
+        res.status(400).json({error: err.message});
+    }
+})
+
 // signup if user does not exist
 router.post('/signup', async (req,res) => {
     try {
