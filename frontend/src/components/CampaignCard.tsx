@@ -19,6 +19,7 @@ interface Events {
   location: string;
   start_time: string;
   completion_status: string;
+  type: string;
 }
 
 const CampaignCard = (campaign: campaignCardProps) => {
@@ -47,6 +48,14 @@ const CampaignCard = (campaign: campaignCardProps) => {
     }
   };
 
+  const setDifficultyColor = () => {
+    if (campaign.difficulty === "Hard") {
+      return "danger";
+    } else if (campaign.difficulty === "Medium") {
+      return "warning";
+    } else return "success";
+  };
+
   return (
     <Card className="mb-4 shadow-sm">
       <Card.Body>
@@ -54,7 +63,7 @@ const CampaignCard = (campaign: campaignCardProps) => {
         <Card.Subtitle className="mb-3 text-muted">
           {campaign.setting}
         </Card.Subtitle>
-        <Badge bg={campaign.role === "Game Master" ? "danger" : "primary"}>
+        <Badge bg={campaign.role === "Game Master" ? "info" : "light"}>
           Role: {campaign.role}
         </Badge>
         <Card.Text>
@@ -64,11 +73,9 @@ const CampaignCard = (campaign: campaignCardProps) => {
           {campaign.time}
           <br />
           <strong>Difficulty: </strong>
-          {campaign.difficulty} <br />
-          <strong>Max Players: </strong>
-          {campaign.maxPlayers} <br />
-          <strong>Current Players: </strong>
-          {campaign.currPlayers} <br />
+          <Badge bg={setDifficultyColor()}>{campaign.difficulty}</Badge> <br />
+          <strong>Players: </strong>
+          {campaign.currPlayers}/{campaign.maxPlayers} <br />
           <strong>Description: </strong>
           {campaign.desc} <br />
         </Card.Text>

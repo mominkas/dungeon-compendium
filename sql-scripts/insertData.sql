@@ -45,13 +45,15 @@ INSERT INTO Participant (location, name, password, experience_level) VALUES
 ('Neverwinter', 'Julia Sangster', '1234', 6),
 ('Baldurs Gate', 'Annie Chung', '1234', 7),
 ('Feywild', 'Rachel Pottinger', '1234', 4),
-('Icewind Dale', 'Jane Doe', '1234', 2);
+('Icewind Dale', 'Jane Doe', '1234', 2),
+('Home', 'No Name', '1234', 2);
 
 INSERT INTO Game_Player (game_player_id) VALUES
 (1),
 (2),
 (3),
-(4);
+(4),
+(6);
 
 INSERT INTO Game_Master (game_master_id) VALUES
 (5);
@@ -70,28 +72,33 @@ INSERT INTO Campaign (campaign_name, meeting_location, meeting_time, setting, di
 ('Curse of Strahd', NULL, '19:30:00', 'Ravenloft', 'Hard', 6, 2, NULL, '2024-02-20', 5),
 ('Storm Kings Thunder', 'AMS Nest', NULL, 'Sword Coast', 'Medium', 7, 5, 'A quest to unite the realms against a giant threat.', '2024-03-01', 5),
 ('Tales from the Yawning Portal', 'Stanley Park', '20:00:00', NULL, 'Medium', 5, 5, 'A collection of classic D&D adventures.', '2024-04-10', 5),
-('Descent into Avernus', 'Dundas Square', '16:00:00', 'Avernus', NULL, 6, 2, NULL, '2024-05-15', 5);
+('Descent into Avernus', 'Dundas Square', '16:00:00', 'Avernus', 'Easy', 6, 2, NULL, '2024-05-15', 5);
 
 INSERT INTO Event (location, start_time, completion_status, campaign_id) VALUES
 ('Castle of Shadows', '18:00:00', 'Completed', 1),
 ('Forest of Whispers', '14:30:00', 'In Progress', 1),
 ('Mountain Fortress', '20:00:00', 'Pending', 2),
 ('City of Gold', '19:00:00', 'Completed', 2),
-('Desert Ruins', '15:00:00', 'In Progress', 3);
+('Depths of the Sea', '15:00:00', 'In Progress', 3),
+('Limgrave', '20:00:00', 'Completed', 5),
+('Caelid', '18:00:00', 'In Progress', 5),
+('ErdTree', '09:00:00', 'In Progress', 1),
+('Great Plateau', '7:00:00', 'Pending', 4),
+('Unknown Realm', '17:00:00', 'Completed', 4);
 
 INSERT INTO Combat_Encounter (terrain, visibility, first_turn, turn_order, event_id) VALUES
 ('Forest', 'Low', 'Player 1', 'Player 1, Player 2, Monster A', 1),
-('Cave', 'Dark', 'Monster B', 'Monster B, Player 3, Player 1', 2),
+('Cave', 'Dark', 'Monster B', 'Monster B, Player 3, Player 1', 6),
 ('Open Field', 'Clear', 'Player 2', 'Player 2, Player 3, Monster C', 3),
-('Dungeon', 'Dim', 'Player 1', 'Player 1, Monster D, Player 2', 4),
-('Ruins', 'Foggy', 'Player 3', 'Player 3, Monster E, Player 1', 5);
+('Dungeon', 'Dim', 'Player 1', 'Player 1, Monster D, Player 2', 8),
+('Ruins', 'Foggy', 'Player 3', 'Player 3, Monster E, Player 1', 10);
 
 INSERT INTO Social_Encounter (social_setting, action, event_id) VALUES
-('Tavern', 'Negotiate with the bartender', 1),
+('Tavern', 'Negotiate with the bartender', 4),
 ('Marketplace', 'Haggle for prices', 2),
-('Nobles Ball', 'Dance with a noble', 3),
-('Street Corner', 'Informally chat with locals', 4),
-('Library', 'Research ancient texts', 5);
+('Nobles Ball', 'Dance with a noble', 7),
+('Street Corner', 'Informally chat with locals', 5),
+('Library', 'Research ancient texts', 9);
 
 INSERT INTO Has_Feat (character_id, feat_name) VALUES 
 (1, 'Sharpshooter'),

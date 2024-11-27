@@ -14,13 +14,18 @@ interface Campaign {
   role: "Game Master" | "Player";
 }
 
+type Difficulty = "all" | "Easy" | "Medium" | "Hard";
+
 const CampaignPage = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [difficultyFilter, setDifficultyFilter] = useState<Difficulty>("all");
 
-  const getCampaigns = async () => {
+  const getCampaigns = async (difficulty: Difficulty) => {
     const id = localStorage.getItem("participantId");
     try {
-      const result = await fetch(`http://localhost:5001/campaign/${id}`);
+      const result = await fetch(
+        `http://localhost:5001/campaign/${id}?difficulty=${difficulty}`
+      );
 
       if (!result.ok) {
         const msg = await result.json();
@@ -39,12 +44,28 @@ const CampaignPage = () => {
   };
 
   useEffect(() => {
-    getCampaigns();
-  }, []);
+    getCampaigns(difficultyFilter);
+  }, [difficultyFilter]);
 
   return (
     <>
       <h1>🏔️ D&D Campaigns 🏔️</h1>
+      <div className="mb-3">
+        <label htmlFor="difficulty" className="mr-2">
+          Filter by Difficulty:{" "}
+        </label>
+        <select
+          id="difficulty"
+          value={difficultyFilter}
+          onChange={(e) => setDifficultyFilter(e.target.value as Difficulty)}
+          className="form-select"
+        >
+          <option value="all">All Difficulties</option>
+          <option value="Easy">Easy</option>
+          <option value="Medium">Medium</option>
+          <option value="Hard">Hard</option>
+        </select>
+      </div>
 
       {!campaignsPresent() && (
         <div>

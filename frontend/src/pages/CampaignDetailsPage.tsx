@@ -1,10 +1,55 @@
 import { useLocation } from "react-router-dom";
-import { Container, Row, Col, Card, ListGroup, Badge } from "react-bootstrap";
+import {
+  Container,
+  Card,
+  Badge,
+  Button,
+  Table,
+  Row,
+  Col,
+  Modal,
+  Form,
+} from "react-bootstrap";
+import { useEffect, useState } from "react";
+import EventDetails from "../components/EventDetails";
+
+interface BaseEncounter {
+  type: "Combat Encounter" | "Social Encounter";
+}
+
+interface CombatEncounter extends BaseEncounter {
+  type: "Combat Encounter";
+  combat_encounter_id: number;
+  terrain?: string;
+  visibility?: string;
+  first_turn: string;
+  turn_order: string;
+}
+
+interface SocialEncounter extends BaseEncounter {
+  type: "Social Encounter";
+  social_encounter_id: number;
+  social_setting?: string;
+  action: string;
+}
+
+export type Encounter = CombatEncounter | SocialEncounter;
 
 const CampaignDetailsPage = () => {
   const location = useLocation();
   const { campaign } = location.state || {};
   const { details, events } = campaign;
+  const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
+  const [eventDetails, setEventDetails] = useState<Encounter | null>(null);
+  const [currentPlayers, setCurrentPlayers] = useState<
+    { participant_id: number; name: string }[]
+  >([]);
+  const [newPlayers, setNewPlayers] = useState<
+    { participant_id: number; name: string }[]
+  >([]);
+  const [selectedPlayers, setSelectedPlayers] = useState<number[]>([]);
+  const [showPlayersModal, setShowPlayersModal] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const getStatusBadgeColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -17,116 +62,334 @@ const CampaignDetailsPage = () => {
     }
   };
 
+  const setDifficultyColor = () => {
+    if (campaign.difficulty === "Hard") {
+      return "danger";
+    } else if (campaign.difficulty === "Medium") {
+      return "warning";
+    } else return "success";
+  };
+
+  const getEventDetails = async (id: number) => {
+    try {
+      const result = await fetch(`http://localhost:5001/events/details/${id}`);
+
+      if (!result.ok) {
+        const msg = await result.json();
+        console.error(msg);
+      }
+
+      const details = await result.json();
+      setEventDetails(Array.isArray(details) ? details[0] : details);
+      setSelectedEventId(id);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getPlayers = async () => {
+    try {
+      const result = await fetch(
+        `http://localhost:5001/campaign/players/${details.id}`
+      );
+
+      if (!result.ok) {
+        const msg = await result.json();
+        console.error(msg);
+      }
+
+      const res = await result.json();
+      setCurrentPlayers(res);
+      console.log(currentPlayers);
+    } catch (error) {
+      console.error(error);
+    }
+
+    try {
+      const result = await fetch(
+        `http://localhost:5001/campaign/${localStorage.getItem(
+          "participantId"
+        )}/${details.id}`
+      );
+
+      if (!result.ok) {
+        const msg = await result.json();
+        console.error(msg);
+      }
+
+      const res = await result.json();
+      setNewPlayers(res);
+      console.log(newPlayers);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const addPlayers = async () => {
+    if (details.currPlayers + selectedPlayers.length > details.maxPlayers) {
+      setError(`Cannot exceed the max player limit (${details.maxPlayers})`);
+      return;
+    }
+
+    try {
+      const currentDate = new Date()
+        .toISOString()
+        .slice(0, 19)
+        .replace("T", " ");
+
+      const response = await fetch(
+        `http://localhost:5001/campaign/add-players/${details.id}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            playerIds: selectedPlayers,
+            date: currentDate,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to add players");
+      }
+
+      await getPlayers();
+
+      details.currPlayers += selectedPlayers.length;
+
+      setError("Players successfully added to the campaign!");
+
+      setTimeout(() => {
+        setSelectedPlayers([]);
+        setError(null);
+        setShowPlayersModal(false);
+      }, 2000);
+    } catch (err) {
+      console.error("Error adding players:", err);
+      setError(err.message || "Failed to add players. Please try again.");
+    }
+  };
+
+  const handleCloseDetails = () => {
+    setEventDetails(null);
+    setSelectedEventId(null);
+  };
+
+  const handlePlayerSelect = (playerId: number) => {
+    setSelectedPlayers((prev) => {
+      const isSelected = prev.includes(playerId);
+      const updatedSelection = isSelected
+        ? prev.filter((id) => id !== playerId)
+        : [...prev, playerId];
+      return updatedSelection;
+    });
+  };
+
+  const handleCloseModal = () => {
+    setShowPlayersModal(false);
+    setSelectedPlayers([]);
+    setError(null);
+  };
+
+  useEffect(() => {
+    if (eventDetails) {
+      console.log("Event details updated:", eventDetails);
+    }
+  }, [eventDetails]);
+
   return (
-    <Container className="my-4">
-      <h1>🎭 Campaign Details 🎭</h1>
+    <Container fluid>
+      <h1 className="mb-4">🎭 Campaign Details 🎭</h1>
       <Row>
-        <Col lg={7}>
+        <Col md={eventDetails ? 8 : 12} className="transition-all duration-300">
           <Card className="mb-4 shadow-sm">
-            <Card.Header className="bg-primary text-white">
-              <h2 className="h4 mb-0">{details.name}</h2>
-            </Card.Header>
             <Card.Body>
-              <Row className="mb-4">
-                <Col sm={6}>
-                  <ListGroup variant="flush">
-                    <ListGroup.Item>
-                      <strong>Location:</strong>
-                      <div className="text-muted">{details.location}</div>
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                      <strong>Time:</strong>
-                      <div className="text-muted">
-                        {details.time.toLocaleString()}
-                      </div>
-                    </ListGroup.Item>
-                  </ListGroup>
-                </Col>
-                <Col sm={6}>
-                  <ListGroup variant="flush">
-                    <ListGroup.Item>
-                      <strong>Players:</strong>
-                      <div className="text-muted">
-                        {details.currPlayers} / {details.maxPlayers}
-                      </div>
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                      <strong>Difficulty:</strong>
-                      <div>
-                        <Badge
-                          bg={
-                            details.difficulty === "Easy"
-                              ? "success"
-                              : "warning"
-                          }
-                        >
-                          {details.difficulty}
-                        </Badge>
-                      </div>
-                    </ListGroup.Item>
-                  </ListGroup>
-                </Col>
-              </Row>
+              <Card.Title className="fs-4 mb-2">{details.name}</Card.Title>
+              <Card.Subtitle className="mb-3 text-muted">
+                {details.setting}
+              </Card.Subtitle>
+              <Badge bg={details.role === "Game Master" ? "info" : "dark"}>
+                Role: {details.role}
+              </Badge>
               <Card.Text>
-                <strong>Description:</strong>
-                <p className="mt-2 mb-0 text-muted">{details.desc}</p>
+                <strong>Location: </strong>
+                {details.location} <br />
+                <strong>Time: </strong>
+                {details.time}
+                <br />
+                <strong>Difficulty: </strong>
+                <Badge bg={setDifficultyColor()}>
+                  {details.difficulty}
+                </Badge>{" "}
+                <br />
+                <strong>Players: </strong>
+                {details.currPlayers}/{details.maxPlayers} <br />
+                <strong>Description: </strong>
+                {details.desc} <br />
               </Card.Text>
             </Card.Body>
+            {details.role === "Game Master" && (
+              <div>
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    getPlayers();
+                    setShowPlayersModal(true);
+                  }}
+                >
+                  Manage Players
+                </Button>
+              </div>
+            )}
           </Card>
-        </Col>
 
-        <Col lg={5}>
           <Card className="shadow-sm">
             <Card.Header className="bg-secondary text-white">
               <h3 className="h5 mb-0">Events</h3>
             </Card.Header>
-            <div style={{ maxHeight: "600px", overflowY: "auto" }}>
-              <Card.Body className="p-3">
-                {events.length > 0 ? (
-                  <Row xs={1} className="g-3">
+            <Card.Body>
+              {events.length > 0 ? (
+                <Table responsive hover className="mb-0">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Location</th>
+                      <th>Status</th>
+                      <th>Type</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
                     {events.map((event, index) => (
-                      <Col key={index}>
-                        <Card className="h-100 border">
-                          <Card.Body className="p-3">
-                            <div className="d-flex justify-content-between align-items-start mb-2">
-                              <h6 className="mb-0">Event #{index + 1}</h6>
-                              <Badge
-                                bg={getStatusBadgeColor(
-                                  event.completion_status
-                                )}
-                              >
-                                {event.completion_status}
-                              </Badge>
-                            </div>
-                            <ListGroup variant="flush" className="small">
-                              <ListGroup.Item className="px-0 py-2">
-                                <strong>Location:</strong>
-                                <div className="text-muted">
-                                  {event.location}
-                                </div>
-                              </ListGroup.Item>
-                              <ListGroup.Item className="px-0 py-2">
-                                <strong>Start Time:</strong>
-                                <div className="text-muted">
-                                  {event.start_time.toLocaleString()}
-                                </div>
-                              </ListGroup.Item>
-                            </ListGroup>
-                          </Card.Body>
-                        </Card>
-                      </Col>
+                      <tr
+                        key={index}
+                        className={
+                          selectedEventId === event.event_id
+                            ? "table-primary"
+                            : ""
+                        }
+                      >
+                        <td>{index + 1}</td>
+                        <td>{event.location}</td>
+                        <td>
+                          <Badge
+                            bg={getStatusBadgeColor(event.completion_status)}
+                          >
+                            {event.completion_status}
+                          </Badge>
+                        </td>
+                        <td>{event.type}</td>
+                        <td>
+                          <Button
+                            size="sm"
+                            variant={
+                              selectedEventId === event.event_id
+                                ? "primary"
+                                : "outline-primary"
+                            }
+                            onClick={() => getEventDetails(event.event_id)}
+                          >
+                            {selectedEventId === event.event_id
+                              ? "Viewing"
+                              : "View Details"}
+                          </Button>
+                        </td>
+                      </tr>
                     ))}
-                  </Row>
-                ) : (
-                  <p className="text-muted mb-0">
-                    No events available for this campaign.
-                  </p>
-                )}
-              </Card.Body>
-            </div>
+                  </tbody>
+                </Table>
+              ) : (
+                <p className="text-muted mb-0">
+                  No events available for this campaign.
+                </p>
+              )}
+            </Card.Body>
           </Card>
         </Col>
+
+        {eventDetails && (
+          <Col md={4} className="mt-0">
+            <Card className="shadow-sm sticky-top" style={{ top: "1rem" }}>
+              <Card.Header className="bg-secondary text-white d-flex justify-content-between align-items-center">
+                <h3 className="h5 mb-0">Event Details</h3>
+                <Button
+                  variant="light"
+                  size="sm"
+                  onClick={handleCloseDetails}
+                  aria-label="Close details"
+                >
+                  ✕
+                </Button>
+              </Card.Header>
+              <Card.Body className="p-0">
+                <EventDetails eventDetails={eventDetails} />
+              </Card.Body>
+            </Card>
+          </Col>
+        )}
       </Row>
+
+      <Modal
+        show={showPlayersModal}
+        onHide={() => setShowPlayersModal(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Manage Players</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {error && <p className="text-danger">{error}</p>}
+          <Row>
+            <Col>
+              <h5>
+                Current Players {details.currPlayers}/{details.maxPlayers}
+              </h5>
+              {currentPlayers.map((player) => (
+                <div>{player.name}</div>
+              ))}
+            </Col>
+            <Col>
+              <h5>Add Players</h5>
+              {newPlayers.length > 0 ? (
+                <Form>
+                  {newPlayers.map((player) => {
+                    return (
+                      <Form.Check
+                        key={player.participant_id}
+                        type="checkbox"
+                        label={player.name}
+                        checked={selectedPlayers.includes(
+                          player.participant_id
+                        )}
+                        onChange={() => {
+                          handlePlayerSelect(player.participant_id);
+                        }}
+                        disabled={
+                          details.currPlayers >= details.maxPlayers &&
+                          !selectedPlayers.includes(player.participant_id)
+                        }
+                      />
+                    );
+                  })}
+                </Form>
+              ) : (
+                <p>No players available</p>
+              )}
+            </Col>
+          </Row>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+          {details.currPlayers < details.maxPlayers && (
+            <Button variant="primary" onClick={addPlayers}>
+              Add
+            </Button>
+          )}
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };

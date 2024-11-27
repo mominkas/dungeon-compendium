@@ -40,7 +40,9 @@ function NavBar() {
         </Link>
       </NavItem>
       <NavItem className="list-group-item">
-        <Link to="/campaigns">Campaigns</Link>
+        <Link to="/campaigns" className="btn btn-dark">
+          Campaigns
+        </Link>
       </NavItem>
       <NavItem className="list-group-item">
         <Link to="/species" className="btn btn-dark">

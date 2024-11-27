@@ -105,7 +105,7 @@ CREATE TABLE Campaign (
     meeting_location VARCHAR(100) NULL,
     meeting_time TIME NULL,
     setting VARCHAR(1000) NULL,
-    difficulty_level VARCHAR(100) NULL,
+    difficulty_level VARCHAR(100) NOT NULL,
     max_num_players INTEGER NOT NULL,
     current_num_players INTEGER NOT NULL,
     description VARCHAR(1000) NULL,
