@@ -1,8 +1,9 @@
 import {useEffect, useState} from "react";
-import {Button, Modal, Stack, Table} from "react-bootstrap";
+import {Button, Modal, Stack, Table, ToggleButton, ToggleButtonGroup} from "react-bootstrap";
 import {Link} from "react-router-dom";
-import CharacterInputForm from "../components/CharacterInputForm.tsx";
-
+import CharacterInputForm, {CharacterInput} from "../components/CharacterInputForm.tsx";
+import LoginService from "../services/LoginService";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export interface Character {
     character_id: number;       // PK
@@ -27,6 +28,23 @@ const CharacterPage = () => {
     // const [alertVariant, setAlertVariant] = useState("");
     // const [alertMessage, setAlertMessage] = useState("");
     const [triggerReload, setTriggerReload] = useState(true);
+    const [characterView, setCharacterView] = useState(1);
+
+    const login = LoginService.getInstance();
+    const currUser = login.getParticipantId();
+
+    const [formData, setFormData] = useState<CharacterInput>({
+            name: null,
+            hair_color: null,
+            eye_color: null,
+            level: null,
+            position: null,
+            class_name: null,
+            species_name: null,
+            rollForHP: true,
+            hitPointsCustom: null
+        }
+    );
 
     // const alertTimeout = () => {
     //     setShowAlert(true);
@@ -35,16 +53,33 @@ const CharacterPage = () => {
     //     }, 3000);
     // }
 
+    const handleCharacterViewChange = (val: number) => {
+        setCharacterView(val);
+        setTriggerReload(true);
+    }
+
 
     const fetchData = async () => {
-        try {
-            const response = await fetch('http://localhost:5001/character');
-            const data = await response.json();
+        if(characterView === 1) {
+            try {
+                const response = await fetch(`http://localhost:5001/character/${currUser}`);
+                const data = await response.json();
 
-            setCharacters(data);
-            setTriggerReload(false);
-        } catch (err) {
-            console.error("Error fetching characters: ", err);
+                setCharacters(data);
+                setTriggerReload(false);
+            } catch (err) {
+                console.error("Error fetching characters: ", err);
+            }
+        } else {
+            try {
+                const response = await fetch('http://localhost:5001/character');
+                const data = await response.json();
+
+                setCharacters(data);
+                setTriggerReload(false);
+            } catch (err) {
+                console.error("Error fetching characters: ", err);
+            }
         }
     }
 
@@ -60,8 +95,37 @@ const CharacterPage = () => {
         setShowAddCharacterModal(true);
     }
 
-    const handleAddCharacterInput = () => {
+    const handleAddCharacterInput = async () => {
+        try {
+            const response = await fetch(`http://localhost:5001/character/${currUser}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({... formData,
+                        participant_id: currUser})
+                });
 
+            if(response.ok) {
+                const data = await response.json();
+                handleCloseAddCharacterModal();
+                setTriggerReload(true);
+                setFormData({
+                    name: null,
+                    hair_color: null,
+                    eye_color: null,
+                    level: null,
+                    position: null,
+                    class_name: null,
+                    species_name: null,
+                    rollForHP: true,
+                    hitPointsCustom: null
+                });
+            }
+        } catch (err) {
+            console.error('Error creating character:', err);
+        }
     }
 
     useEffect(() => {
@@ -70,16 +134,35 @@ const CharacterPage = () => {
 
     return (
         <>
-            <Stack  gap={10}
+            <Stack  gap={3}
                     direction={"vertical"}>
                 <h1> 🧙 D&D Characters 🧙 </h1>
                 <h5> Click on a character to discover more!</h5>
 
-                <Button     variant={"primary"}
-                            onClick={handleShowAddCharacterModal}>
-                    Add a New Character!
-                </Button>
-
+                    <Button     variant={"primary"}
+                                onClick={handleShowAddCharacterModal}>
+                        Add a New Character!
+                    </Button>
+                    <div>
+                    <ToggleButtonGroup  type={"radio"}
+                                        className="btn-group mb-3"
+                                        name={"characterView"}
+                                        defaultValue={1}
+                                        onChange={handleCharacterViewChange}>
+                        <ToggleButton id={"tbg-radio-1"}
+                                      value={1}
+                                      style={{
+                                          borderTopLeftRadius: '5px',
+                                          borderBottomLeftRadius: '5px',
+                                      }}>
+                           My Characters
+                        </ToggleButton>
+                        <ToggleButton id={"tbg-radio-2"}
+                                      value={2}>
+                            All Characters
+                        </ToggleButton>
+                    </ToggleButtonGroup>
+                    </div>
                 <Table>
                     <thead>
                         <tr>
@@ -162,7 +245,8 @@ const CharacterPage = () => {
                     <Modal.Body>
                         <Stack direction={"vertical"}
                                gap={2}>
-                            <CharacterInputForm/>
+                            <CharacterInputForm formData={formData}
+                                                setFormData={setFormData}/>
                         </Stack>
                     </Modal.Body>
                     <Modal.Footer>

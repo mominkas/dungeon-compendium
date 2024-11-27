@@ -22,23 +22,11 @@ export interface SpeciesOption {
     name: string;
 }
 
-const CharacterInputForm = () => {
+const CharacterInputForm = ({formData, setFormData}) => {
 
     const [triggerReload, setTriggerReload] = useState(true);
     const [classLevelOptions, setClassLevelOptions] = useState<ClassLevelOption[]>([]);
     const [speciesOptions, setSpeciesOptions] = useState<SpeciesOption[]>([]);
-    const [formData, setFormData] = useState<CharacterInput>({
-            name: null,
-            hair_color: null,
-            eye_color: null,
-            level: null,
-            position: null,
-            class_name: null,
-            species_name: null,
-            rollForHP: true,
-            hitPointsCustom: null
-        }
-    );
 
     useEffect(() => {
         fetchOptions();
@@ -113,9 +101,9 @@ const CharacterInputForm = () => {
                 </Form.Group>
                 <Form.Group className={"mb-3"} controlId={"charInput.hair_color"}>
                     <Form.Label>Hair Color</Form.Label>
-                    <Form.Control type={"text"} placeholder={"Honey Mist Auburn"}></Form.Control>
+                    <Form.Control type={"text"} placeholder={"Honey Mist Auburn" } onChange={handleFormChange}></Form.Control>
                 </Form.Group>
-                <Form.Group className={"mb-3"} controlId={"charInput.eye_color"}>
+                <Form.Group className={"mb-3"} controlId={"charInput.eye_color"} onChange={handleFormChange}>
                     <Form.Label>Eye Color</Form.Label>
                     <Form.Control type={"text"} placeholder={"Blue"}></Form.Control>
                 </Form.Group>
