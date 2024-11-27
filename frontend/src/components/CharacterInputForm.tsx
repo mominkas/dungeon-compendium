@@ -1,7 +1,8 @@
-import {Form} from "react-bootstrap";
+import {Badge, Form} from "react-bootstrap";
 import {useEffect, useState} from "react";
 
 export interface CharacterInput {
+    character_id:       number | null;
     name:               string | null;
     hair_color:         string | null;
     eye_color:          string | null;
@@ -10,7 +11,7 @@ export interface CharacterInput {
     class_name:         string | null;
     species_name:       string | null;
     rollForHP:          boolean | null;
-    hitPointsCustom:    string | null;
+    hitPointsCustom:    number | null;
 }
 
 export interface ClassLevelOption {
@@ -92,20 +93,25 @@ const CharacterInputForm = ({formData, setFormData}) => {
     return (
         <>
             <Form>
+                {formData.character_id && <h1>
+                    <Badge> Editing Character {formData.character_id} </Badge>
+                </h1>}
                 <h4> Identifying Features </h4>
                 <Form.Group className={"mb-3"} controlId={"charInput.name"}>
                     <Form.Label>Name</Form.Label>
-                    <Form.Control   type={"text"}
-                                    placeholder={"They Themington"}
-                                    onChange={handleFormChange}></Form.Control>
+                    <Form.Control type={"text"}
+                                  placeholder={"They Themington"}
+                                  value={formData.name || ''}
+                                  onChange={handleFormChange}></Form.Control>
                 </Form.Group>
                 <Form.Group className={"mb-3"} controlId={"charInput.hair_color"}>
                     <Form.Label>Hair Color</Form.Label>
-                    <Form.Control type={"text"} placeholder={"Honey Mist Auburn" } onChange={handleFormChange}></Form.Control>
+                    <Form.Control type={"text"} placeholder={"Honey Mist Auburn"}
+                                  value={formData.hair_color || ''} onChange={handleFormChange}></Form.Control>
                 </Form.Group>
                 <Form.Group className={"mb-3"} controlId={"charInput.eye_color"} onChange={handleFormChange}>
                     <Form.Label>Eye Color</Form.Label>
-                    <Form.Control type={"text"} placeholder={"Blue"}></Form.Control>
+                    <Form.Control type={"text"} placeholder={"Blue"} value={formData.eye_color || ''}></Form.Control>
                 </Form.Group>
 
                 <h4>Character Build</h4>
@@ -114,7 +120,7 @@ const CharacterInputForm = ({formData, setFormData}) => {
                     <Form.Select
                         value={formData.class_name || ''}
                         onChange={handleFormChange}>
-                        <option value = "">Select a Class</option>
+                        <option value="">Select a Class</option>
                         {uniqueClassNames.map(className => (
                             <option key={className} value={className}>
                                 {className}
@@ -128,7 +134,7 @@ const CharacterInputForm = ({formData, setFormData}) => {
                         value={formData.level || ''}
                         onChange={handleFormChange}
                         disabled={!formData.class_name}>
-                        <option value = "">Select a Level</option>
+                        <option value="">Select a Level</option>
                         {levelsForSelectedClass.map(level => (
                             <option key={level} value={level}>
                                 {level}
@@ -141,7 +147,7 @@ const CharacterInputForm = ({formData, setFormData}) => {
                     <Form.Select
                         value={formData.species_name || ''}
                         onChange={handleFormChange}>
-                        <option value = "">Select a Species</option>
+                        <option value="">Select a Species</option>
                         {uniqueSpecies.map(species => (
                             <option key={species} value={species}>
                                 {species}
