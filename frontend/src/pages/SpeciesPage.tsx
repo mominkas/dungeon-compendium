@@ -59,7 +59,7 @@ const SpeciesPage = () => {
                     ))
                 ) : (
                     <tr>
-                        <td colSpan="5">No species results from your search. Please try again!</td>
+                        <td colSpan={5}>No species results from your search. Please try again!</td>
                     </tr>
                 )}
                 </tbody>

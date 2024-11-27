@@ -47,7 +47,7 @@ const ClassLevelFeaturesInput = ({ onSuccess, onFailure, updateClassLevelFeature
     const canSubmit = form.level && form.num_hit_die && form.advantage_effect && form.modifier_effect;
 
     return (
-        <div className="d-flex justify-content-center align-items-center">
+        <div className="d-flex justify-content-center align-items-center mt-3">
             <h6 className="custom-h6-label">Add a level</h6>
             <Form
                 className="d-flex justify-content-center"
@@ -82,7 +82,7 @@ const ClassLevelFeaturesInput = ({ onSuccess, onFailure, updateClassLevelFeature
                     placeholder="Modifier effect"
                 />
                 <Button
-                    className="btn btn-success"
+                    className="btn btn-success custom-icon-btn"
                     type="submit"
                     disabled={!canSubmit}>
                     <MdAdd />

@@ -12,8 +12,7 @@
 
 ## Scripts
 
-- To create tables for the db, run the createTables.sql script using the following command in the terminal: `psql -U [your username] -d [db name] -f [path to createTables.sql in the sql-scripts folder]`
-- To insert data into the tables, run insertData.sql
+- To create tables and insert data in the db, run the initialize.sql script using the following command in the terminal: `psql -U [your username] -d [db name] -f [path]`
 
 ## Frontend
 

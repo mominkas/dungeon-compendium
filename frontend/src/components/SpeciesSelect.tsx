@@ -7,11 +7,11 @@ const SpeciesSelect = ({onSuccess, onFailure, updateSpecies}) => {
     const attributes = ["name", "description", "weight", "height", "type"];
     const clauses = ["AND", "OR"];
     const attrOps = {
-        name: ["=", "<>", "like"],
-        description: ["=", "<>", "like"],
-        weight: ["=", "<>", "<", ">", "<=", ">="],
-        height: ["=", "<>", "<", ">", "<=", ">="],
-        type: ["=", "<>", "like"],
+        name: ["does not equal", "contains", "is"],
+        description: ["does not equal", "contains", "is"],
+        weight: ["=", "does not equal", "<", ">", "<=", ">="],
+        height: ["=", "does not equal", "<", ">", "<=", ">="],
+        type: ["does not equal", "contains", "is"],
     };
     const attrPlaceholders = {
         name: "Text",
@@ -41,6 +41,20 @@ const SpeciesSelect = ({onSuccess, onFailure, updateSpecies}) => {
 
     const handleReset = () => {
         setConditions([{ index: 0, attr: "", op: "", val: "", clause: "" }]);
+        updateSpecies([]);
+    }
+
+    const handleViewAll = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch('http://localhost:5001/species');
+            const data = await response.json();
+
+            updateSpecies(data);
+        } catch (error) {
+            console.error("Error fetching species: ", error);
+        }
     }
 
     const handleSubmit = async (e) => {
@@ -117,6 +131,7 @@ const SpeciesSelect = ({onSuccess, onFailure, updateSpecies}) => {
                             </td>
                             <td className="align-content-center">
                                 <Form.Select
+                                    value={cond.clause}
                                     onChange={(e) =>
                                         handleCondition(cond.index, "clause", e.target.value)}
                                 >
@@ -125,8 +140,9 @@ const SpeciesSelect = ({onSuccess, onFailure, updateSpecies}) => {
                                         <option value={clause}> {clause} </option>)}
                                 </Form.Select>
                             </td>
-                            <td className="align-content-center">
+                            <td className="d-flex align-content-center justify-content-center">
                                 <Button
+                                    className="custom-icon-btn"
                                     disabled={conditions.length === 1}
                                     variant="danger"
                                     onClick={() => (handleDelete(cond.index))}>
@@ -147,8 +163,9 @@ const SpeciesSelect = ({onSuccess, onFailure, updateSpecies}) => {
                     Add a condition
                 </Button>
                 <div className="small">
-                    Note: Text inputs are case-sensitive and can accept <a href="https://www.postgresql.org/docs/7.3/functions-matching.html">wildcards</a>.
+                    Note: Text inputs are case-sensitive.
                 </div>
+                <Button variant="secondary" onClick={handleViewAll}>View All</Button>
                 <Button variant="secondary" onClick={handleReset}>Reset</Button>
                 <Button onClick={handleSubmit}>Search</Button>
             </div>
