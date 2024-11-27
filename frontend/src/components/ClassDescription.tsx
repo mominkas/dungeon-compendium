@@ -76,9 +76,12 @@ const ClassDescription = () => {
                 )}
                 </tbody>
             </Table>
-            {showAlert && <Alert
-                show={showAlert}
-                variant={alertVariant}>
+            {showAlert &&
+                <Alert
+                    show={showAlert}
+                    variant={alertVariant}
+                    style={{position:'fixed', left:'50%', bottom:'50px', transform:'translateX(-50%)'}}
+                >
                 {alertMessage}
             </Alert>}
         </>

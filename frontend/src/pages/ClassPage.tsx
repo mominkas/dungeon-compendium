@@ -95,10 +95,13 @@ const ClassPage = () => {
                     )}
                     </tbody>
                 </Table>
-                {showAlert && <Alert
-                    show={showAlert}
-                    variant={alertVariant}>
-                    {alertMessage}
+                {showAlert &&
+                    <Alert
+                        show={showAlert}
+                        variant={alertVariant}
+                        style={{position:'fixed', left:'50%', bottom:'50px', transform:'translateX(-50%)'}}
+                    >
+                        {alertMessage}
                 </Alert>}
             </div>}
         </>
