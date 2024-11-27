@@ -12,6 +12,7 @@ interface campaignCardProps {
   currPlayers: string;
   desc: string;
   role: "Game Master" | "Player";
+  inPage?: boolean;
 }
 
 interface Events {
@@ -63,7 +64,7 @@ const CampaignCard = (campaign: campaignCardProps) => {
         <Card.Subtitle className="mb-3 text-muted">
           {campaign.setting}
         </Card.Subtitle>
-        <Badge bg={campaign.role === "Game Master" ? "info" : "light"}>
+        <Badge bg={campaign.role === "Game Master" ? "info" : "dark"}>
           Role: {campaign.role}
         </Badge>
         <Card.Text>
@@ -79,9 +80,11 @@ const CampaignCard = (campaign: campaignCardProps) => {
           <strong>Description: </strong>
           {campaign.desc} <br />
         </Card.Text>
-        <Button variant="primary" onClick={handleOpenCampaign}>
-          Open
-        </Button>
+        {campaign.inPage === undefined && (
+          <Button variant="primary" onClick={handleOpenCampaign}>
+            Open
+          </Button>
+        )}
       </Card.Body>
     </Card>
   );

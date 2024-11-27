@@ -12,6 +12,7 @@ import {
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import EventDetails from "../components/EventDetails";
+import CampaignCard from "../components/CampaignCard";
 
 interface BaseEncounter {
   type: "Combat Encounter" | "Social Encounter";
@@ -203,46 +204,33 @@ const CampaignDetailsPage = () => {
       <h1 className="mb-4">🎭 Campaign Details 🎭</h1>
       <Row>
         <Col md={eventDetails ? 8 : 12} className="transition-all duration-300">
-          <Card className="mb-4 shadow-sm">
-            <Card.Body>
-              <Card.Title className="fs-4 mb-2">{details.name}</Card.Title>
-              <Card.Subtitle className="mb-3 text-muted">
-                {details.setting}
-              </Card.Subtitle>
-              <Badge bg={details.role === "Game Master" ? "info" : "dark"}>
-                Role: {details.role}
-              </Badge>
-              <Card.Text>
-                <strong>Location: </strong>
-                {details.location} <br />
-                <strong>Time: </strong>
-                {details.time}
-                <br />
-                <strong>Difficulty: </strong>
-                <Badge bg={setDifficultyColor()}>
-                  {details.difficulty}
-                </Badge>{" "}
-                <br />
-                <strong>Players: </strong>
-                {details.currPlayers}/{details.maxPlayers} <br />
-                <strong>Description: </strong>
-                {details.desc} <br />
-              </Card.Text>
-            </Card.Body>
-            {details.role === "Game Master" && (
-              <div>
-                <Button
-                  size="sm"
-                  onClick={() => {
-                    getPlayers();
-                    setShowPlayersModal(true);
-                  }}
-                >
-                  Manage Players
-                </Button>
-              </div>
-            )}
-          </Card>
+          <CampaignCard
+            id={details.id}
+            name={details.name}
+            location={details.location}
+            time={details.time}
+            setting={details.setting}
+            difficulty={details.difficulty}
+            maxPlayers={details.maxPlayers}
+            currPlayers={details.currPlayers}
+            desc={details.desc}
+            role={details.role}
+            inPage={true}
+          ></CampaignCard>
+          {details.role === "Game Master" && (
+            <div className="mb-4">
+              <Button
+                size="sm"
+                onClick={() => {
+                  getPlayers();
+                  setShowPlayersModal(true);
+                }}
+              >
+                Manage Players
+              </Button>
+            </div>
+          )}
+          {/* </Card> */}
 
           <Card className="shadow-sm">
             <Card.Header className="bg-secondary text-white">
