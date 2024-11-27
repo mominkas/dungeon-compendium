@@ -14,6 +14,23 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/popularSpecies', async (req, res) => {
+    try {
+        const query =
+            `SELECT s.name AS name, COUNT(*) AS count
+            FROM character c
+            JOIN species s ON c.species_name = s.name
+            GROUP BY s.name
+            ORDER BY count DESC;`
+
+        const pool = await getPool();
+        const result = await pool.query(query);
+        res.status(200).json(result.rows);
+    } catch (err) {
+        res.status(400).json({error: err.message});
+    }
+});
+
 // Selection: user can search for tuples using AND/OR clauses and combination of attributes
 router.post('/', async (req, res) => {
     try {

@@ -216,10 +216,14 @@ INSERT INTO Class(name, level) VALUES
 ('Fighter', 4),
 ('Fighter', 5),
 ('Paladin', 1),
-('Paladin', 2),
+('Paladin', 4),
 ('Wizard', 5),
-('Cleric', 1),
-('Rogue', 3);
+('Rogue', 3),
+('Cleric', 3),
+('Barbarian', 5),
+('Bard', 4),
+('Druid', 2),
+('Monk', 5);
 
 INSERT INTO Species (name, description, weight, height, type) VALUES
 ('Human', NULL, '65', '180', 'Humanoid'),
@@ -259,11 +263,29 @@ INSERT INTO Game_Master (game_master_id) VALUES
 
 -- Character and related inserts
 INSERT INTO Character (name, hair_color, eye_color, level, position, hp, class_name, species_name, participant_id) VALUES
-('Loathsome Dung Eater', 'Black', 'Brown', 2, 'Sallys Tavern', 18, 'Paladin', 'Dwarf', 1),
+('Loathsome Dung Eater', 'Black', 'Brown', 4, 'Sally’s Tavern', 18, 'Paladin', 'Dwarf', 1),
 ('Margit the Fell', NULL, 'Blue', 1, 'Top of Mount Doom', 12, 'Fighter', 'Human', 2),
-('General Radhan', 'Silver', 'Green', 5, 'Baldurs Gate Potion Shop', 22, 'Wizard', 'Elf', 3),
+('General Radhan', 'Silver', 'Green', 5, 'Baldur’s Gate Potion Shop', 22, 'Wizard', 'Elf', 3),
 ('Zarak Shadowsong', 'Brown', 'Hazel', 3, 'Ravenloft Salon', 16, 'Rogue', 'Halfling', 4),
-('Tarnished', NULL, NULL, 1, 'Avernus Concert Hall', 12, 'Fighter', 'Dragonborn', 5);
+('Tarnished', NULL, NULL, 1, 'Avernus Concert Hall', 12, 'Fighter', 'Dragonborn', 5),
+('Zylar Nightwing', 'Silver', 'Purple', 5, 'The High Elven Court', 20, 'Wizard', 'Elf', 1),
+('Kaltor Mistshade', 'Brown', 'Gray', 3, 'The Stoneforge', 18, 'Cleric', 'Dwarf', 2),
+('Nestor Blackflit', 'Blonde', 'Green', 2, 'Cedarwood Forest', 15, 'Fighter', 'Halfling', 3),
+('Elowen Heartstride', 'Red', 'Yellow', 2, 'Firepeak Forge', 24, 'Fighter', 'Elf', 3),
+('Aurelia Lightbringer', 'White', 'Amber', 4, 'Celestial Temple', 22, 'Paladin', 'Elf', 2),
+('Nimblefoot Brightspark', 'Brown', 'Blue', 5, 'Glimmerstone Village', 17, 'Wizard', 'Gnome', 1),
+('Thalindra Dawnhooves', 'Black', 'Gray', 3, 'Himalayan Peaks', 28, 'Fighter', 'Elf', 4),
+('Thrak Bloodfury', 'Green', 'Red', 3, 'Warlord Fortress', 20, 'Rogue', 'Orc', 5),
+('Lilith Shadowflame', 'Purple', 'Red', 5, 'Infernal Citadel', 21, 'Wizard', 'Tiefling', 1),
+('Aeryn Brightblade', 'Blonde', 'Blue', 1, 'Sally’s Tavern', 15, 'Fighter', 'Human', 1),
+('Darrael Swiftshadow', 'Grey', 'Green', 5, 'Tower of the Arcane', 12, 'Wizard', 'Elf', 1),
+('Celestra Valianthoof', 'Black', 'Brown', 3, 'Thieves Guild', 18, 'Rogue', 'Halfling', 1),
+('Seraphina Lightbringer', 'Red', 'Hazel', 3, 'Holy Chapel', 20, 'Cleric', 'Aasimar', 1),
+('Valeria Sunhammer', 'Brown', 'Blue', 4, 'Paladin’s Keep', 25, 'Paladin', 'Dwarf', 1),
+('Gorrak Ironfist', 'Black', 'Yellow', 5, 'Battlefield', 30, 'Barbarian', 'Dragonborn', 1),
+('Liora Songbird', 'Brown', 'Green', 4, 'Forest Glade', 22, 'Bard', 'Gnome', 1),
+('Lyra Gracewalker', 'Silver', 'Amber', 2, 'Ancient Grove', 16, 'Druid', 'Elf', 1),
+('Vorin Ashblood', 'Black', 'Grey', 5, 'Monastery of the Empty Fist', 24, 'Monk', 'Human', 1);
 
 -- Campaign related inserts
 INSERT INTO Campaign (campaign_name, meeting_location, meeting_time, setting, difficulty_level, max_num_players, current_num_players, description, date_created, game_master_id) VALUES
