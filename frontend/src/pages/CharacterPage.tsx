@@ -247,7 +247,7 @@ const CharacterPage = () => {
                         <th>Class</th>
                         <th>Species</th>
                         <th>Played By</th>
-                        <th></th>
+                        {characterView === 1 && <th></th>}
                     </tr>
                     </thead>
                     <tbody>
@@ -280,11 +280,14 @@ const CharacterPage = () => {
                                     {char.participant_id}
                                 </Link>
                             </td>
+
+                            {characterView === 1 &&
                             <td>
                                 <Button onClick={(e) => handleShowEditCharacterModal(e, char)}>
                                     Edit
                                 </Button>
                             </td>
+                            }
                         </tr>
                     ))}
                     </tbody>
