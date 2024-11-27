@@ -1,12 +1,14 @@
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import ClassPage from "./pages/ClassPage.tsx";
 import SpeciesPage from "./pages/SpeciesPage.tsx";
+import CharacterPage from "./pages/CharacterPage.tsx";
 import PrivateRoute from "./components/PrivateRoute.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import NavBar from "./components/NavBar.tsx";
 import CampaignPage from "./pages/CampaignPage.tsx";
 import CampaignDetailsPage from "./pages/CampaignDetailsPage.tsx";
+import HomePage from "./pages/HomePage.tsx";
 
 function App() {
   return (
@@ -21,10 +23,7 @@ function App() {
             path="/"
             element={
               <PrivateRoute>
-                {" "}
-                <div>
-                  <h1>⚔️ Welcome to our DND Database ⚔️</h1>
-                </div>
+                <HomePage />
               </PrivateRoute>
             }
           />
@@ -57,6 +56,14 @@ function App() {
             element={
               <PrivateRoute>
                 <SpeciesPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/characters"
+            element={
+              <PrivateRoute>
+                <CharacterPage />
               </PrivateRoute>
             }
           />

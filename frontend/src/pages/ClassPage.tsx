@@ -55,7 +55,7 @@ const ClassPage = () => {
     return (
         <>
             <h1>🏛️ D&D Classes 🏛️</h1>
-            <Navbar className="d-flex flex-row justify-content-center">
+            <Navbar className="d-flex flex-row justify-content-evenly">
                 <NavItem className="list-group-item"><Link to="/classes">Classes</Link></NavItem>
                 <NavItem className="list-group-item"><Link to="/classes/descriptions">Descriptions</Link></NavItem>
                 <NavItem className="list-group-item"><Link to="/classes/level_features">Level Features</Link></NavItem>
