@@ -18,16 +18,22 @@ export interface Character {
     position: string | null;
 }
 
+export interface HallOfShameEntry{
+    name: string | null;
+    ability_name: string | null;
+    modifier: number | null;
+}
+
 const CharacterPage = () => {
 
     const [characters, setCharacters] = useState<Character[]>([]);
     const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
+
+    const [hallOfShame, setHallOfShame] = useState<HallOfShameEntry[]>([]);
+
     const [showSelCharacterModal, setShowSelCharacterModal] = useState(false);
     const [showAddCharacterModal, setShowAddCharacterModal] = useState(false);
     const [showEditCharacterModal, setShowEditCharacterModal] = useState(false);
-    // const [showAlert, setShowAlert] = useState(false);
-    // const [alertVariant, setAlertVariant] = useState("");
-    // const [alertMessage, setAlertMessage] = useState("");
     const [triggerReload, setTriggerReload] = useState(true);
     const [characterView, setCharacterView] = useState(1);
 
@@ -48,13 +54,6 @@ const CharacterPage = () => {
         }
     );
 
-    // const alertTimeout = () => {
-    //     setShowAlert(true);
-    //     setTimeout(() => {
-    //         setShowAlert(false);
-    //     }, 3000);
-    // }
-
     const handleCharacterViewChange = (val: number) => {
         setCharacterView(val);
         setTriggerReload(true);
@@ -64,7 +63,7 @@ const CharacterPage = () => {
     const fetchData = async () => {
         if (characterView === 1) {
             try {
-                const response = await fetch(`http://localhost:5001/character/${currUser}`);
+                const response = await fetch(`http://localhost:5001/character/listCharacters/${currUser}`);
                 const data = await response.json();
 
                 setCharacters(data);
@@ -72,12 +71,22 @@ const CharacterPage = () => {
             } catch (err) {
                 console.error("Error fetching characters: ", err);
             }
-        } else {
+        } else if (characterView === 2) {
             try {
                 const response = await fetch('http://localhost:5001/character');
                 const data = await response.json();
 
                 setCharacters(data);
+                setTriggerReload(false);
+            } catch (err) {
+                console.error("Error fetching characters: ", err);
+            }
+        } else if (characterView === 3) {
+            try {
+                const response = await fetch('http://localhost:5001/character/hallOfShame');
+                const data = await response.json();
+
+                setHallOfShame(data);
                 setTriggerReload(false);
             } catch (err) {
                 console.error("Error fetching characters: ", err);
@@ -196,8 +205,6 @@ const CharacterPage = () => {
                     character_id: null
                 });
                 setTriggerReload(true);
-            } else {
-                console.error('Server error:', data.error, data.details);
             }
         } catch (err) {
             console.error('Error creating character:', err);
@@ -237,9 +244,17 @@ const CharacterPage = () => {
                                       value={2}>
                             All Characters
                         </ToggleButton>
+                        <ToggleButton id={"tbg-radio-3"}
+                                      value={3}>
+                            Stats
+                        </ToggleButton>
                     </ToggleButtonGroup>
                 </div>
-                <Table>
+
+
+                {/* This bit of code shows the table for the first two views */}
+                {(characterView === 1 || characterView === 2) &&
+                    <Table>
                     <thead>
                     <tr>
                         <th>Name</th>
@@ -292,6 +307,37 @@ const CharacterPage = () => {
                     ))}
                     </tbody>
                 </Table>
+                }
+
+                {/* This bit of code shows the stats panels, when they're up */}
+                {(characterView === 3) &&
+                    <div>
+                    <h2> Hall Of Shame!</h2>
+
+                        This is the list of characters with the worst ability scores!
+
+                    <Table>
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Ability</th>
+                            <th>Score</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {hallOfShame.length > 0 && hallOfShame.map((entry: HallOfShameEntry) => (
+                            <tr key={entry.name}>
+                                <td>{entry.name}</td>
+                                <td>{entry.ability_name}</td>
+                                <td>{entry.modifier}</td>
+                            </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+                    </div>}
+
+
+
             </Stack>
             {selectedCharacter !== null &&
                 <Modal show={showSelCharacterModal}

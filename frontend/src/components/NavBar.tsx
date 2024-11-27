@@ -1,6 +1,7 @@
 import {Navbar, NavItem} from "react-bootstrap";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import LoginService from "../services/LoginService";
+import React from "react";
 
 function NavBar() {
     const location = useLocation();
@@ -18,21 +19,31 @@ function NavBar() {
     };
 
     return (
-        <Navbar className="d-flex flex-row justify-content-evenly">
+
+        <Navbar className="d-flex flex-row justify-content-evenly w-100 fixed-top">
+            <Navbar.Brand href="/" className="d-flex align-items-center">
+                <img
+                    alt=""
+                    src="/favicon.png"
+                    width="30"
+                    height="30"
+                    className="d-inline-block align-top"
+                />
+            </Navbar.Brand>
             <NavItem className="list-group-item">
-                <Link to="/">Home</Link>
+                <Link to="/" className="btn btn-dark">Home</Link>
             </NavItem>
             <NavItem className="list-group-item">
-                <Link to="/classes">Classes</Link>
+                <Link to="/classes" className="btn btn-dark">Classes</Link>
             </NavItem>
             <NavItem className="list-group-item">
-                <Link to="/species">Species</Link>
+                <Link to="/species" className="btn btn-dark">Species</Link>
             </NavItem>
             <NavItem className="list-group-item">
-                <Link to="/characters">Characters</Link>
+                <Link to="/characters" className="btn btn-dark">Characters</Link>
             </NavItem>
             <NavItem className="list-group-item">
-                <Link to="/login" onClick={handleLogout}>
+                <Link to="/login" onClick={handleLogout} className="btn btn-danger">
                     Log Out
                 </Link>
             </NavItem>

@@ -6,6 +6,7 @@ import CharacterPage from "./pages/CharacterPage.tsx";
 import PrivateRoute from "./components/PrivateRoute.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import NavBar from "./components/NavBar.tsx";
+import HomePage from "./pages/HomePage.tsx";
 
 function App() {
 
@@ -19,10 +20,7 @@ function App() {
             path="/"
             element={
               <PrivateRoute>
-                {" "}
-                <div>
-                  <h1>⚔️ Welcome to our DND Database ⚔️</h1>
-                </div>
+                <HomePage />
               </PrivateRoute>
             }
           />

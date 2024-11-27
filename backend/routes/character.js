@@ -14,12 +14,34 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/:participantId', async (req, res) => {
+router.get('/listCharacters/:participantId', async (req, res) => {
     try {
         const pool = await getPool();
         const participantId = req.params.participantId;
         const query = `SELECT * FROM character WHERE participant_id = $1 ORDER BY name`;
         const result = await pool.query(query, [participantId]);
+        res.status(200).json(result.rows);
+    } catch (err) {
+        res.status(400).json({error: err.message});
+    }
+});
+
+router.get('/hallOfShame', async (req, res) => {
+    try {
+        const pool = await getPool();
+        const query = `SELECT c1.name, a1.name AS ability_name, a1.modifier
+            FROM character c1
+            JOIN ability_score a1 ON c1.character_id = a1.character_id
+            WHERE a1.modifier <= ALL (
+                SELECT AVG(a2.modifier)
+                FROM character c2
+                JOIN ability_score a2 ON c2.character_id = a2.character_id
+                WHERE a2.name = a1.name
+                GROUP BY a2.name
+            )
+            ORDER BY ability_name
+            `
+        const result = await pool.query(query);
         res.status(200).json(result.rows);
     } catch (err) {
         res.status(400).json({error: err.message});
@@ -41,7 +63,7 @@ router.post('/add/:participantId', async (req, res) => {
             hitPointsCustom
         } = req.body;
 
-        // need to update with true partipant ID
+        // need to update with true participant ID
         const participant_id = req.body.participant_id;
 
         if (!name || !class_name || !level || !species_name || !participant_id) {
