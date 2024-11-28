@@ -8,8 +8,8 @@ interface campaignCardProps {
   time: string;
   setting: string;
   difficulty: string;
-  maxPlayers: string;
-  currPlayers: string;
+  maxPlayers: number;
+  currPlayers: number;
   desc: string;
   role: "Game Master" | "Player";
   inPage?: boolean;

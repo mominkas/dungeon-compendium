@@ -95,6 +95,15 @@ router.post('/add-players/:id', async (req, res) => {
             await pool.query('BEGIN');
 
             for (const playerId of playerIds) {
+                const insertPlayerQuery = `
+                    INSERT INTO Game_Player (game_player_id)
+                    VALUES ($1)
+                    ON CONFLICT (game_player_id) DO NOTHING
+                `;
+                await pool.query(insertPlayerQuery, [playerId]);
+            }
+
+            for (const playerId of playerIds) {
                 const insertQuery = `
                     INSERT INTO Enroll (game_player_id, campaign_id, date_joined)
                     VALUES ($1, $2, $3)
@@ -130,5 +139,30 @@ router.post('/add-players/:id', async (req, res) => {
         res.status(500).json({ error: 'Failed to add players to campaign ' + err });
     }
 });
+
+router.post('/create', async (req,res) => {
+    const {campaign_name, meeting_location, meeting_time, setting, difficulty_level, max_num_players, current_num_players, description, date_created, game_master_id} = req.body
+
+    try {
+        const pool = await getPool();
+        const insertGMQuery = `
+        INSERT INTO game_master (game_master_id)
+        VALUES ($1)
+        On CONFLICT (game_master_id) DO NOTHING`
+        const insertResult = await pool.query(insertGMQuery, [game_master_id])
+
+        const campaignQuery =  `
+        INSERT INTO campaign (campaign_name, meeting_location, meeting_time, setting, difficulty_level, max_num_players, current_num_players, description, date_created, game_master_id)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`
+
+        const values = [campaign_name, meeting_location, meeting_time, setting, difficulty_level, max_num_players, current_num_players, description, date_created, game_master_id]
+        const result = await pool.query(campaignQuery, values)
+
+        res.status(200).json(result.rows[0])
+        
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to add players to campaign ' + error });
+    }
+})
 
 export default router

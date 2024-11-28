@@ -63,14 +63,6 @@ const CampaignDetailsPage = () => {
     }
   };
 
-  const setDifficultyColor = () => {
-    if (campaign.difficulty === "Hard") {
-      return "danger";
-    } else if (campaign.difficulty === "Medium") {
-      return "warning";
-    } else return "success";
-  };
-
   const getEventDetails = async (id: number) => {
     try {
       const result = await fetch(`http://localhost:5001/events/details/${id}`);
@@ -101,7 +93,6 @@ const CampaignDetailsPage = () => {
 
       const res = await result.json();
       setCurrentPlayers(res);
-      console.log(currentPlayers);
     } catch (error) {
       console.error(error);
     }
@@ -120,13 +111,13 @@ const CampaignDetailsPage = () => {
 
       const res = await result.json();
       setNewPlayers(res);
-      console.log(newPlayers);
     } catch (error) {
       console.error(error);
     }
   };
 
   const addPlayers = async () => {
+    console.log(selectedPlayers, details.id);
     if (details.currPlayers + selectedPlayers.length > details.maxPlayers) {
       setError(`Cannot exceed the max player limit (${details.maxPlayers})`);
       return;
