@@ -52,7 +52,7 @@ CREATE TABLE Feat (
 CREATE TABLE Participant (
     participant_id SERIAL PRIMARY KEY,
     location VARCHAR(1000) NULL,
-    name VARCHAR(100) NOT NULL,
+    name VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     experience_level INTEGER NULL
 );

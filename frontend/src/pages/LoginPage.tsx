@@ -52,14 +52,22 @@ const LoginPage = () => {
         body: JSON.stringify({ name: form.username, password: form.password }),
       });
 
+      if (!result.ok) {
+        const msg = await result.json();
+        setAlertMessage(msg.error);
+        setAlertVariant("danger");
+        alertTimeout();
+        return;
+      }
+
       const success = await result.json();
       setAlertMessage(success.msg);
       setAlertVariant("success");
       alertTimeout();
       setOnSignup(false);
     } catch (error) {
-      console.error(error);
-      setAlertMessage("Failed to signup");
+      console.error("Error during signup:", error);
+      setAlertMessage("An error occurred during signup");
       setAlertVariant("danger");
       alertTimeout();
     }
