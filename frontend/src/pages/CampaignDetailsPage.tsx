@@ -9,6 +9,7 @@ import {
   Col,
   Modal,
   Form,
+  Alert,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import EventDetails from "../components/EventDetails";
@@ -42,6 +43,9 @@ const CampaignDetailsPage = () => {
   const { details, events } = campaign;
   const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
   const [eventDetails, setEventDetails] = useState<Encounter | null>(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertVariant, setAlertVariant] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
   const [currentPlayers, setCurrentPlayers] = useState<
     { participant_id: number; name: string }[]
   >([]);
@@ -61,6 +65,13 @@ const CampaignDetailsPage = () => {
       default:
         return "secondary";
     }
+  };
+
+  const alertTimeout = () => {
+    setShowAlert(true);
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 3000);
   };
 
   const getEventDetails = async (id: number) => {
@@ -119,7 +130,11 @@ const CampaignDetailsPage = () => {
   const addPlayers = async () => {
     console.log(selectedPlayers, details.id);
     if (details.currPlayers + selectedPlayers.length > details.maxPlayers) {
-      setError(`Cannot exceed the max player limit (${details.maxPlayers})`);
+      setAlertMessage(
+        `Cannot exceed the max player limit (${details.maxPlayers})`
+      );
+      setAlertVariant("danger");
+      alertTimeout();
       return;
     }
 
@@ -150,16 +165,18 @@ const CampaignDetailsPage = () => {
 
       details.currPlayers += selectedPlayers.length;
 
-      setError("Players successfully added to the campaign!");
-
+      setSelectedPlayers([]);
+      setAlertMessage("Players successfully added to the campaign!");
+      setAlertVariant("success");
+      alertTimeout();
       setTimeout(() => {
-        setSelectedPlayers([]);
-        setError(null);
         setShowPlayersModal(false);
       }, 2000);
     } catch (err) {
       console.error("Error adding players:", err);
-      setError(err.message || "Failed to add players. Please try again.");
+      setAlertMessage("Failed to add players");
+      setAlertVariant("danger");
+      alertTimeout();
     }
   };
 
@@ -368,6 +385,20 @@ const CampaignDetailsPage = () => {
             </Button>
           )}
         </Modal.Footer>
+        {showAlert && (
+          <Alert
+            show={showAlert}
+            variant={alertVariant}
+            style={{
+              position: "fixed",
+              bottom: "20px",
+              right: "20px",
+              zIndex: 9999,
+            }}
+          >
+            {alertMessage}
+          </Alert>
+        )}
       </Modal>
     </Container>
   );
