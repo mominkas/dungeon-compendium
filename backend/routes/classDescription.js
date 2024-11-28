@@ -1,5 +1,6 @@
 import express from 'express';
 import {getPool} from "../db.js";
+import {PK_DUPLICATE_CODE} from "./index.js";
 
 const router = express.Router();
 
@@ -14,8 +15,38 @@ router.get('/', async (req, res) => {
     }
 });
 
+// INSERT
+router.post('/insert', async (req, res) => {
+    try {
+        const {name, description, primary_ability, weapon_proficiency, armor_proficiency, hit_die, saving_throw_proficiency} =
+            req.body;
+        const pool = await getPool();
+
+        const insertClassDescription = await pool.query(
+            "INSERT INTO class_description VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+            [
+                name,
+                description,
+                primary_ability,
+                weapon_proficiency,
+                armor_proficiency,
+                hit_die,
+                saving_throw_proficiency
+            ]
+        );
+
+        res.status(200).json(insertClassDescription.rows[0]);
+    } catch (err) {
+        if (Number(err.code) === PK_DUPLICATE_CODE) {
+            res.status(400).json({error: "This description already exists"});
+        } else {
+            res.status(400).json({error: err.message});
+        }
+    }
+});
+
 // Projection: user can choose any number of attributes to view
-router.post('/', async (req, res) => {
+router.post('/projection', async (req, res) => {
     try {
         const {attributes} = req.body;
 

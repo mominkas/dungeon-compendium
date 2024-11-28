@@ -1,17 +1,29 @@
 import express from 'express';
 import {getPool} from "../db.js";
-import {selectAll} from "./index.js";
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-    await selectAll(req, res, 'species');
-});
-
-router.get('/options', async (req, res) => {
     try {
         const pool = await getPool();
-        const query = `SELECT name FROM species ORDER BY name`;
+        const query = `SELECT * FROM species ORDER BY name`;
+        const result = await pool.query(query);
+        res.status(200).json(result.rows);
+    } catch (err) {
+        res.status(400).json({error: err.message});
+    }
+});
+
+router.get('/popularSpecies', async (req, res) => {
+    try {
+        const query =
+            `SELECT s.name AS name, COUNT(*) AS count
+            FROM character c
+            JOIN species s ON c.species_name = s.name
+            GROUP BY s.name
+            ORDER BY count DESC;`
+
+        const pool = await getPool();
         const result = await pool.query(query);
         res.status(200).json(result.rows);
     } catch (err) {
@@ -35,7 +47,20 @@ router.post('/', async (req, res) => {
 
         const parts = [];
         conditions.forEach((cond) => {
-            const {attr, op, val, clause} = cond;
+            let {attr, op, val, clause} = cond;
+
+            switch(op) {
+                case "does not equal":
+                    op = "<>";
+                    break;
+                case "contains":
+                    op = "like";
+                    val = `%${val}%`;
+                    break;
+                case "is":
+                    op = "like";
+                    break;
+            }
 
             (cond.attr === "weight" || cond.attr === "height")
                 ? parts.push(`${attr} ${op} ${val} ${clause}`)

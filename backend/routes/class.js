@@ -16,11 +16,17 @@ router.get('/', async (req, res) => {
     }
 });
 
-// used by characters to get valid options for upload
-router.get('/options', async (req, res) => {
+router.get('/classyCharacters', async (req, res) => {
     try {
+        const query =
+        `SELECT p.participant_id, p.name AS name, AVG(c.level) AS avg
+        FROM participant p
+        JOIN character c ON p.participant_id = c.participant_id
+        GROUP BY p.participant_id, p.name
+        HAVING AVG(c.level) > 2
+        ORDER BY avg DESC;`
+
         const pool = await getPool();
-        const query = `SELECT name, level FROM class ORDER BY name, level`;
         const result = await pool.query(query);
         res.status(200).json(result.rows);
     } catch (err) {
