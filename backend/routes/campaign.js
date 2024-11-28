@@ -3,6 +3,27 @@ import { getPool } from '../db.js';
 
 const router = express.Router();
 
+router.get('/popularDifficulty', async (req, res) => {
+    try {
+        const pool = await getPool()
+        const query= `
+        SELECT 
+            c1.difficulty_level,
+            AVG(c1.current_num_players * 1.0 / c1.max_num_players) AS avg_ratio
+        FROM campaign c1
+        GROUP BY c1.difficulty_level
+        HAVING AVG(c1.current_num_players * 1.0 / c1.max_num_players) >= ALL (
+            SELECT AVG(c2.current_num_players * 1.0 / c2.max_num_players)
+            FROM campaign c2
+            GROUP BY c2.difficulty_level);`
+
+        const result = await pool.query(query)
+        res.status(200).json(result.rows)
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch popular difficulty ' + error });
+    }
+})
+
 router.get("/:id", async (req, res) => {
     const { id } = req.params
     const { difficulty } = req.query
@@ -82,7 +103,6 @@ router.get('/:gmId/:id', async (req,res) => {
         res.status(400).json({error: "Could not get players " + error})
     }
 })
-
 
 router.post('/add-players/:id', async (req, res) => {
     const campaignId = req.params.id;

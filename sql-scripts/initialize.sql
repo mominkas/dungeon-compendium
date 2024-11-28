@@ -352,6 +352,9 @@ INSERT INTO Ability_Score (character_id, name, modifier) VALUES
 
 INSERT INTO Enroll (game_player_id, campaign_id, date_joined) VALUES
 (1, 1, '2024-01-15'),
+(1, 2, '2024-01-15'),
+(1, 3, '2024-01-15'),
+(1, 4, '2024-01-15'),
 (2, 2, '2024-02-20'),
 (3, 1, '2024-04-10'),
 (4, 2, '2024-03-05');
