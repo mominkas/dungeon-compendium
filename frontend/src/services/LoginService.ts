@@ -47,7 +47,8 @@ class LoginService {
             return true
 
         } catch (error) {
-            throw new Error("Failed to login: " + error)            
+           console.error("Failed to login: " + error) 
+           return false           
         }
     }
 
