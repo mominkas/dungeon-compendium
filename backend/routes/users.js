@@ -5,6 +5,20 @@ import {getPool} from '../db.js'
 
 const router = express.Router();
 
+router.get('/all/:id', async (req,res) => {
+    const { id } = query.params;
+    try {
+        const pool = await getPool()
+        const query = `
+        SELECT * FROM participant p
+        WHERE p.participant_id != $1`
+        const result = await pool.query(query)
+        res.status(200).json(result.rows)
+    } catch (error) {
+        res.status(400).json({error: "Could not get list of users " + error})
+    }
+})
+
 router.get('/allClassesPlayers', async (req,res) => {
     try {
         const pool = await getPool();
@@ -29,18 +43,16 @@ router.get('/allClassesPlayers', async (req,res) => {
     }
 })
 
-// signup if user does not exist
+
 router.post('/signup', async (req,res) => {
     try {
         const db = await getPool();
         const { name, password } = req.body;
 
-        //check valid inputs
         if (!name || !password) {
             return res.status(400).json({error: "Please enter name and password"})
         }
 
-        //check if user is present
         const isUserPresent = await db.query(
             'SELECT name FROM Participant WHERE name = $1',
             [name]
@@ -50,7 +62,6 @@ router.post('/signup', async (req,res) => {
             return res.status(400).json({error: "username already exists, please choose a different user name!"})
         }
 
-        // user not present, hash the pw to enter into db
         const salts = 10;
         const hashedPw = await bcrypt.hash(password, salts);
 
@@ -73,18 +84,15 @@ router.post('/signup', async (req,res) => {
     }
 })
 
-// login
 router.post('/login', async (req, res) => {
     try {
         const db = await getPool();
         const { name, password } = req.body;
     
-        //check valid inputs
         if (!name || !password) {
             return res.status(400).json({error: "Please enter name and password"})
         }
-    
-        //get the user from the db
+
         const getUser = await db.query(
             'SELECT * FROM Participant WHERE name = $1',
             [name]
@@ -95,8 +103,7 @@ router.post('/login', async (req, res) => {
         if (!user) {
             return res.status(401).json({error: "Invalid Creds"})
         }
-    
-        // compare stroed hashed pw with provided pw
+
         const checkPW = await bcrypt.compare(password, user.password)
     
         if (!checkPW && password != user.password) {

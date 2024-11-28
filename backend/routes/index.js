@@ -7,6 +7,7 @@ import classLevelFeatures from "./classLevelFeatures.js";
 import {getPool} from "../db.js";
 import species from "./species.js";
 import userRouter from './users.js';
+import eventsRouter from './events.js';
 
 const router = express.Router();
 
@@ -22,6 +23,7 @@ router.use('/character', characterRouter);
 router.use('/class', classRouter);
 router.use('/class_description', classDescription);
 router.use('/class_level_features', classLevelFeatures);
+router.use('/events', eventsRouter);
 router.use('/species', species);
 router.use('/users', userRouter);
 
