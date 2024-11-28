@@ -1,9 +1,14 @@
 import {useState} from "react";
-import {Table} from "react-bootstrap";
+import {Alert, Table} from "react-bootstrap";
 import ClassDescProject from "./ClassDescProject.tsx";
+import ClassDescInput from "./ClassDescInput.tsx";
 
 const ClassDescription = () => {
     const [desc, setDesc] = useState([]);
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertVariant, setAlertVariant] = useState("");
+    const [alertMessage, setAlertMessage] = useState("");
+    const[triggerReload, setTriggerReload] = useState(false);
     const classDescAttrs = [
         { id: "name", name: "Name" },
         { id: "description", name: "Description" },
@@ -14,9 +19,39 @@ const ClassDescription = () => {
         { id: "saving_throw_proficiency", name: "Saving Throw Proficiency" }
     ];
 
+    const alertTimeout = () => {
+        setShowAlert(true);
+        setTimeout(() => {
+            setShowAlert(false);
+        }, 3000);
+    }
+
+    const onInputSuccess = (name) => {
+        const successMessage = `Added description for ${name}.`;
+        setAlertMessage(successMessage);
+        setAlertVariant("success");
+        alertTimeout();
+        setTriggerReload(true);
+    }
+
+    const onInputFailure = (name, err) => {
+        const failureMessage = `Failed to add description for ${name}. Error: ${err}.`;
+        setAlertMessage(failureMessage);
+        setAlertVariant("danger");
+        alertTimeout();
+    }
+
     return (
         <>
-            <ClassDescProject updateDesc={setDesc} />
+            <ClassDescInput
+                onSuccess={onInputSuccess}
+                onFailure={onInputFailure}
+            />
+            <ClassDescProject
+                updateDesc={setDesc}
+                triggerReload={triggerReload}
+                setTriggerReload={setTriggerReload}
+            />
             <Table className="mt-5">
                 <thead>
                 <tr>
@@ -41,6 +76,14 @@ const ClassDescription = () => {
                 )}
                 </tbody>
             </Table>
+            {showAlert &&
+                <Alert
+                    show={showAlert}
+                    variant={alertVariant}
+                    style={{position:'fixed', left:'50%', bottom:'50px', transform:'translateX(-50%)'}}
+                >
+                {alertMessage}
+            </Alert>}
         </>
     );
 };

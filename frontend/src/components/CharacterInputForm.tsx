@@ -36,7 +36,7 @@ const CharacterInputForm = ({formData, setFormData}) => {
     const fetchOptions = async () => {
 
         try {
-            const response = await fetch('http://localhost:5001/class/options');
+            const response = await fetch('http://localhost:5001/class');
             const data = await response.json();
             setClassLevelOptions(data);
         } catch (err) {
@@ -44,7 +44,7 @@ const CharacterInputForm = ({formData, setFormData}) => {
         }
 
         try {
-            const response = await fetch('http://localhost:5001/species/options');
+            const response = await fetch('http://localhost:5001/species');
             const data = await response.json();
             setSpeciesOptions(data);
         } catch (err) {

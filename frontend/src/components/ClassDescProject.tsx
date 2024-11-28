@@ -1,7 +1,7 @@
 import {Button, Form} from "react-bootstrap";
 import {useEffect, useState} from "react";
 
-const ClassDescProject = ({updateDesc}) => {
+const ClassDescProject = ({updateDesc, triggerReload, setTriggerReload}) => {
     const [selectedAttrs, setSelectedAttrs] = useState([]);
     const classDescAttrs = [
         { id: "name", name: "Name" },
@@ -39,7 +39,7 @@ const ClassDescProject = ({updateDesc}) => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch(`http://localhost:5001/class_description`, {
+            const response = await fetch(`http://localhost:5001/class_description/projection`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ attributes: selectedAttrs }),
@@ -48,6 +48,7 @@ const ClassDescProject = ({updateDesc}) => {
             if (response.ok) {
                 const data = await response.json();
                 updateDesc(data);
+                setTriggerReload(false);
             }
         } catch (err) {
             console.error("Error fetching class descriptions:", err);
@@ -57,10 +58,10 @@ const ClassDescProject = ({updateDesc}) => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [triggerReload]);
 
     return (
-        <div className="flex-column justify-content-start align-content-start align-items-start">
+        <div className="flex-column justify-content-start align-content-start align-items-start mt-3">
             <div className="d-flex justify-content-center align-items-center">
                 <h6 className="custom-h6-label">Select columns to view</h6>
                 <Form className="d-flex flex-row">

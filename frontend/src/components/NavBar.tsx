@@ -19,7 +19,6 @@ function NavBar() {
     };
 
     return (
-
         <Navbar className="d-flex flex-row justify-content-evenly w-100 fixed-top">
             <Navbar.Brand href="/" className="d-flex align-items-center">
                 <img

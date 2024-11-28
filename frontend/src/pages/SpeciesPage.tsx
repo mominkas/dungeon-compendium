@@ -59,14 +59,17 @@ const SpeciesPage = () => {
                     ))
                 ) : (
                     <tr>
-                        <td colSpan="5">No species results from your search. Please try again!</td>
+                        <td colSpan={5}>No species results from your search. Please try again!</td>
                     </tr>
                 )}
                 </tbody>
             </Table>
-            {showAlert && <Alert
-                show={showAlert}
-                variant={alertVariant}>
+            {showAlert &&
+                <Alert
+                    show={showAlert}
+                    variant={alertVariant}
+                    style={{position:'fixed', left:'50%', bottom:'50px', transform:'translateX(-50%)'}}
+                >
                 {alertMessage}
             </Alert>}
         </>

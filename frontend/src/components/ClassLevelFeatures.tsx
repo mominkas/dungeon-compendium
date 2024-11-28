@@ -107,14 +107,14 @@ const ClassLevelFeatures = ({setTriggerReload}) => {
                 <tbody>
                     {desc.length > 0 ? (
                         desc.map((item) => (
-                                <tr key={item.level} className="align-self-center">
-                                    <td>{item.level}</td>
-                                    <td>{item.num_hit_die}</td>
-                                    <td>{item.advantage_effect}</td>
-                                    <td>{item.modifier_effect}</td>
-                                    <td>
+                                <tr key={item.level}>
+                                    <td className="align-content-center">{item.level}</td>
+                                    <td className="align-content-center">{item.num_hit_die}</td>
+                                    <td className="align-content-center">{item.advantage_effect}</td>
+                                    <td className="align-content-center">{item.modifier_effect}</td>
+                                    <td className="d-flex justify-content-center align-content-center">
                                         <button
-                                            className='btn btn-danger'
+                                            className="btn btn-danger custom-icon-btn"
                                             onClick={() => handleDelete(item.level)}>
                                             <TbTrash />
                                         </button>
@@ -123,14 +123,17 @@ const ClassLevelFeatures = ({setTriggerReload}) => {
                             ))
                     ) : (
                         <tr>
-                            <td colSpan="5">No class descriptions available.</td>
+                            <td colSpan={5}>No class descriptions available.</td>
                         </tr>
                     )}
                 </tbody>
             </Table>
-            {showAlert && <Alert
-                show={showAlert}
-                variant={alertVariant}>
+            {showAlert &&
+                <Alert
+                    show={showAlert}
+                    variant={alertVariant}
+                    style={{position:'fixed', left:'50%', bottom:'50px', transform:'translateX(-50%)'}}
+                >
                 {alertMessage}
             </Alert>}
             <Modal show={showModal}>
