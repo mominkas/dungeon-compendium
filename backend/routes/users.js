@@ -23,7 +23,7 @@ router.get('/allClassesPlayers', async (req,res) => {
     try {
         const pool = await getPool();
         const query = `
-            SELECT p.name
+            SELECT p.name, p.location,g p.experience_level
             FROM Participant p
             WHERE NOT EXISTS (
                 (   SELECT c.name
