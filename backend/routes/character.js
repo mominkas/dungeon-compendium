@@ -110,7 +110,7 @@ router.post('/add/:participantId', async (req, res) => {
 
         res.status(201).json(result.rows[0]);
     } catch (err) {
-        console.log(err);
+        res.status(400).json({error: err.message});
     }
 });
 
@@ -171,7 +171,7 @@ router.post('/edit', async (req, res) => {
 
         res.status(201).json(result.rows[0]);
     } catch (err) {
-        console.log(err);
+        res.status(400).json({error: err.message});
     }
 });
 
