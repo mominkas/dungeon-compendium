@@ -190,7 +190,7 @@ const CharacterPage = () => {
                 handleCloseAddCharacterModal();
                 setTriggerReload(true);
                 setAlertVariant("success");
-                setAlertText(`Successfully added character ${data}`);
+                setAlertText(`Successfully added character ${data.name}`);
                 setShowAlert(true);
             } else {
                 setAlertVariant("danger");
@@ -239,7 +239,7 @@ const CharacterPage = () => {
                 const data = await response.json();
                 handleCloseEditCharacterModal();
                 setAlertVariant("success");
-                setAlertText(`Successfully edited character ${data}`);
+                setAlertText(`Successfully edited character ${data.name}`);
                 setShowAlert(true);
                 setTriggerReload(true);
             } else {
