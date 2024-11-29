@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Button, Modal, Stack, Table, ToggleButton, ToggleButtonGroup} from "react-bootstrap";
+import {Alert, Button, Modal, Stack, Table, ToggleButton, ToggleButtonGroup} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import CharacterInputForm, {CharacterInput} from "../components/CharacterInputForm.tsx";
 import LoginService from "../services/LoginService";
@@ -40,6 +40,10 @@ const CharacterPage = () => {
     const login = LoginService.getInstance();
     const currUser = login.getParticipantId();
 
+    const [alertVariant, setAlertVariant] = useState("danger");
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertText, setAlertText] = useState(" ");
+
     const [formData, setFormData] = useState<CharacterInput>({
             name: null,
             hair_color: null,
@@ -59,6 +63,10 @@ const CharacterPage = () => {
         setTriggerReload(true);
     }
 
+    const handleCloseAlert = () => {
+        setShowAlert(false);
+    }
+
 
     const fetchData = async () => {
         if (characterView === 1) {
@@ -70,6 +78,9 @@ const CharacterPage = () => {
                 setTriggerReload(false);
             } catch (err) {
                 console.error("Error fetching characters: ", err);
+                setAlertVariant("danger");
+                setAlertText(`Errored fetching characters:\n ${err}`);
+                setShowAlert(true);
             }
         } else if (characterView === 2) {
             try {
@@ -80,6 +91,9 @@ const CharacterPage = () => {
                 setTriggerReload(false);
             } catch (err) {
                 console.error("Error fetching characters: ", err);
+                setAlertVariant("danger");
+                setAlertText(`Errored fetching characters:\n ${err}`);
+                setShowAlert(true);
             }
         } else if (characterView === 3) {
             try {
@@ -90,6 +104,9 @@ const CharacterPage = () => {
                 setTriggerReload(false);
             } catch (err) {
                 console.error("Error fetching characters: ", err);
+                setAlertVariant("danger");
+                setAlertText(`Errored fetching characters:\n ${err}`);
+                setShowAlert(true);
             }
         }
     }
@@ -101,7 +118,21 @@ const CharacterPage = () => {
         setSelectedCharacter(char);
     }
 
-    const handleCloseEditCharacterModal = () => setShowEditCharacterModal(false);
+    const handleCloseEditCharacterModal = () => {
+        setShowEditCharacterModal(false);
+        setFormData({
+            name: null,
+            hair_color: null,
+            eye_color: null,
+            level: null,
+            position: null,
+            class_name: null,
+            species_name: null,
+            rollForHP: true,
+            hitPointsCustom: null,
+            character_id: null
+        });
+    }
     const handleShowEditCharacterModal = (e: React.MouseEvent, char: Character) => {
         e.preventDefault();
         setShowEditCharacterModal(true);
@@ -120,7 +151,21 @@ const CharacterPage = () => {
 
     }
 
-    const handleCloseAddCharacterModal = () => setShowAddCharacterModal(false);
+    const handleCloseAddCharacterModal = () =>  {
+        setShowAddCharacterModal(false);
+        setFormData({
+            name: null,
+            hair_color: null,
+            eye_color: null,
+            level: null,
+            position: null,
+            class_name: null,
+            species_name: null,
+            rollForHP: true,
+            hitPointsCustom: null,
+            character_id: null
+        });
+    }
     const handleShowAddCharacterModal = () => {
         setShowAddCharacterModal(true);
     }
@@ -139,25 +184,26 @@ const CharacterPage = () => {
                     })
                 });
 
+            const data = await response.json();
+
             if (response.ok) {
-                const data = await response.json();
                 handleCloseAddCharacterModal();
                 setTriggerReload(true);
-                setFormData({
-                    name: null,
-                    hair_color: null,
-                    eye_color: null,
-                    level: null,
-                    position: null,
-                    class_name: null,
-                    species_name: null,
-                    rollForHP: true,
-                    hitPointsCustom: null,
-                    character_id: null
-                });
+                setAlertVariant("success");
+                setAlertText(`Successfully added character ${data.name}`);
+                setShowAlert(true);
+            } else {
+                setAlertVariant("danger");
+                setAlertText(`Failed to add character!`);
+                setShowAlert(true);
             }
         } catch (err) {
-            console.error('Error creating character:', err);
+            console.error("Error creating character: ", err);
+            setAlertVariant("danger");
+            setAlertText(`Errored creating character:\n", ${err}`);
+            setShowAlert(true);
+        } finally {
+            handleCloseAddCharacterModal();
         }
     }
 
@@ -192,22 +238,22 @@ const CharacterPage = () => {
             if (response.ok) {
                 const data = await response.json();
                 handleCloseEditCharacterModal();
-                setFormData({
-                    name: null,
-                    hair_color: null,
-                    eye_color: null,
-                    level: null,
-                    position: null,
-                    class_name: null,
-                    species_name: null,
-                    rollForHP: true,
-                    hitPointsCustom: null,
-                    character_id: null
-                });
+                setAlertVariant("success");
+                setAlertText(`Successfully edited character ${data.name}`);
+                setShowAlert(true);
                 setTriggerReload(true);
+            } else {
+                setAlertVariant("danger");
+                setAlertText(`Failed to edit character!`);
+                setShowAlert(true);
             }
-        } catch (err) {
-            console.error('Error creating character:', err);
+        } catch(err) {
+            console.error("Error editing character: ", err);
+            setAlertVariant("danger");
+            setAlertText(`Errored editing character:\n", ${err}`);
+            setShowAlert(true);
+        } finally {
+            handleCloseEditCharacterModal();
         }
     }
 
@@ -220,6 +266,13 @@ const CharacterPage = () => {
             <Stack gap={3}
                    direction={"vertical"}>
                 <h1> 🧙 D&D Characters 🧙 </h1>
+                <Alert
+                    variant={alertVariant}
+                    dismissible={true}
+                    show={showAlert}
+                    onClose={handleCloseAlert}>
+                    {alertText}
+                </Alert>
                 <h5> Click on a character to discover more!</h5>
 
                 <Button variant={"primary"}
