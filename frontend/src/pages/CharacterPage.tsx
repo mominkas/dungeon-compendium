@@ -334,19 +334,13 @@ const CharacterPage = () => {
                                 {char.level}
                             </td>
                             <td>
-                                <Link to={`/character/${char.class_name}`}>
                                     {char.class_name}
-                                </Link>
                             </td>
                             <td>
-                                <Link to={`/character/${char.species_name}`}>
                                     {char.species_name}
-                                </Link>
                             </td>
                             <td>
-                                <Link to={`/participant${char.participant_id}`}>
                                     {char.participant_id}
-                                </Link>
                             </td>
 
                             {characterView === 1 &&
